@@ -28,4 +28,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <!-- Native FFmpeg .so (Linux) — bổ sung 2026-07-23, cùng nguồn build .so với Kztek.Cameras.Avalonia
+       (KHÔNG commit .so vào git — file > 100MB, GitHub từ chối push. Copy thủ công vào
+       runtimes\linux-x64\native\ tại máy dev/deploy trước khi build/publish).
+       Pattern Condition="Exists(...)" để không lỗi khi máy dev/CI chưa có .so cục bộ. -->
+  <ItemGroup Condition="Exists('runtimes\linux-x64\native')">
+    <None Include="runtimes\linux-x64\native\*.so*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

@@ -2,3 +2,9 @@
 [Oo]bj/
 .vs/
 *.user
+
+# FFmpeg native libs (dll/so) - khong commit vao git: file lon (libavcodec.so ~93MB,
+# gan sat gioi han 100MB GitHub tu choi push), va lam phinh lich su repo moi lan cap nhat.
+# Copy thu cong vao dung thu muc tai may dev/deploy truoc khi build/publish (xem ghi chu
+# trong Kztek.VideoPlayer.Avalonia.csproj / Kztek.Cameras.Avalonia.csproj).
+**/runtimes/*/native/*.so*
