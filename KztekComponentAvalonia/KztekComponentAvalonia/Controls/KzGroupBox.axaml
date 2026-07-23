@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="KztekComponentAvalonia.Controls.KzGroupBox"
+             x:Name="Root">
+
+  <Border Name="GroupRoot"
+          Background="{StaticResource kz.brush.white}"
+          BorderBrush="{StaticResource kz.brush.border}"
+          BorderThickness="1"
+          CornerRadius="{StaticResource kz.radius.lg}">
+    <DockPanel>
+
+      <!-- Header (shown when Title is set) -->
+      <Border Name="HeaderBorder"
+              DockPanel.Dock="Top"
+              Height="44"
+              Padding="16,0"
+              IsVisible="False">
+        <TextBlock Name="TitleText"
+                   FontSize="{StaticResource kz.font.md}"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}"
+                   VerticalAlignment="Center" />
+      </Border>
+
+      <!-- Divider (shown when Title is set) -->
+      <Rectangle Name="DividerLine"
+                 DockPanel.Dock="Top"
+                 Height="1"
+                 Fill="{StaticResource kz.brush.border}"
+                 IsVisible="False" />
+
+      <!-- Content slot -->
+      <ContentPresenter Name="ContentSlot"
+                        Content="{Binding GroupContent, ElementName=Root}"
+                        Margin="16" />
+    </DockPanel>
+  </Border>
+</UserControl>

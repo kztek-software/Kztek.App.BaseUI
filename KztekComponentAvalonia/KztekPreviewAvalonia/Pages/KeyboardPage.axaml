@@ -1,0 +1,122 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia"
+             x:Class="KztekPreviewAvalonia.Pages.KeyboardPage">
+
+  <DockPanel>
+
+    <!-- ── Keyboard docked to bottom ─────────────────────────────────────── -->
+    <Border DockPanel.Dock="Bottom"
+            Background="#EEE8F8"
+            BorderBrush="{StaticResource kz.brush.navy.300}"
+            BorderThickness="0,1,0,0"
+            Padding="8">
+      <kz:KzKeyboard Name="MainKeyboard"
+                     HorizontalAlignment="Center" />
+    </Border>
+
+    <!-- ── Input card ────────────────────────────────────────────────────── -->
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+      <Border Padding="0,0,0,16">
+      <StackPanel Spacing="24"
+                  HorizontalAlignment="Center"
+                  MaxWidth="700">
+
+        <!-- Section header -->
+        <StackPanel Spacing="4">
+          <TextBlock Text="KzKeyboard — Virtual Keyboard + Telex"
+                     FontSize="22" FontWeight="Bold"
+                     Foreground="{StaticResource kz.brush.navy.900}" />
+          <TextBlock Text="Nhấn nút VIE để bật gõ tiếng Việt kiểu Telex. Nhấn lại để tắt."
+                     FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+        </StackPanel>
+
+        <!-- Input area card -->
+        <Border Background="{StaticResource kz.brush.white}"
+                BorderBrush="{StaticResource kz.brush.border}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource kz.radius.xl}"
+                Padding="32"
+                BoxShadow="{StaticResource kz.shadow.md}">
+
+          <StackPanel Spacing="16">
+            <TextBlock Text="NHẬP VĂN BẢN"
+                       FontSize="18" FontWeight="Bold"
+                       Foreground="{StaticResource kz.brush.navy.900}" />
+
+            <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+            <TextBlock Text="Gõ bằng bàn phím bên dưới — nhấn VIE để chuyển sang Telex"
+                       FontSize="12" Foreground="{StaticResource kz.brush.text.muted}" />
+
+            <!-- Main input -->
+            <TextBox Name="MainInput"
+                     Watermark="Nhập văn bản tại đây…"
+                     FontSize="22"
+                     FontWeight="SemiBold"
+                     Foreground="{StaticResource kz.brush.navy.900}"
+                     Height="72"
+                     TextAlignment="Center"
+                     AcceptsReturn="False" />
+
+            <!-- Status row -->
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Name="StatusLabel"
+                         Text=""
+                         FontSize="13"
+                         Foreground="{StaticResource kz.brush.success}"
+                         VerticalAlignment="Center" />
+
+              <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                <kz:KzButton Name="BtnClear"
+                             Content="Xoá"
+                             Variant="Secondary" KzSize="Md"
+                             Width="100" />
+                <kz:KzButton Name="BtnConfirm"
+                             Content="Xác nhận ↵"
+                             Variant="Primary" KzSize="Md"
+                             Width="140" />
+              </StackPanel>
+            </Grid>
+
+          </StackPanel>
+        </Border>
+
+        <!-- Telex guide card -->
+        <Border Background="{StaticResource kz.brush.navy.100}"
+                BorderBrush="{StaticResource kz.brush.navy.300}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource kz.radius.lg}"
+                Padding="20">
+          <StackPanel Spacing="10">
+            <TextBlock Text="Hướng dẫn gõ Telex"
+                       FontSize="14" FontWeight="SemiBold"
+                       Foreground="{StaticResource kz.brush.navy.900}" />
+            <WrapPanel Orientation="Horizontal">
+              <Border Margin="0,0,12,8" Padding="8,4"
+                      Background="{StaticResource kz.brush.white}"
+                      CornerRadius="6">
+                <TextBlock Text="aa → â  |  aw → ă  |  oo → ô  |  ow → ơ  |  uw → ư  |  dd → đ"
+                           FontSize="12" Foreground="{StaticResource kz.brush.navy.700}"
+                           FontFamily="Consolas,monospace" />
+              </Border>
+              <Border Margin="0,0,0,8" Padding="8,4"
+                      Background="{StaticResource kz.brush.white}"
+                      CornerRadius="6">
+                <TextBlock Text="s=sắc  |  f=huyền  |  r=hỏi  |  x=ngã  |  j=nặng"
+                           FontSize="12" Foreground="{StaticResource kz.brush.orange.500}"
+                           FontFamily="Consolas,monospace" />
+              </Border>
+            </WrapPanel>
+            <TextBlock Text="Ví dụ: 'hoaf' → 'hoà', 'vietj' → 'việt', 'tiengr vietj' → 'tiếng việt'"
+                       FontSize="12" Foreground="{StaticResource kz.brush.text.muted}"
+                       FontStyle="Italic" />
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
+      </Border>
+    </ScrollViewer>
+
+  </DockPanel>
+</UserControl>

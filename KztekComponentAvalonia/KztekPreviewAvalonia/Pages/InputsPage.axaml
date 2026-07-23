@@ -1,0 +1,297 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia"
+             x:Class="KztekPreviewAvalonia.Pages.InputsPage">
+
+  <ScrollViewer>
+    <StackPanel Spacing="32" MaxWidth="600" HorizontalAlignment="Left" Margin="0,0,0,24">
+
+      <!-- KzTextBox -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzTextBox — Input states và sizes"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <TextBlock Text="Normal, Focus (viền cam), Error (viền đỏ), Disabled. 3 kích thước."
+                   FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Normal state" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzTextBox Watermark="Họ và tên" KzSize="Md" />
+        <kz:KzTextBox Watermark="Email của bạn" KzSize="Md" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Size variants" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzTextBox Watermark="Small — 32px" KzSize="Sm" />
+        <kz:KzTextBox Watermark="Medium — 40px" KzSize="Md" />
+        <kz:KzTextBox Watermark="Large — 48px" KzSize="Lg" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Error state" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzTextBox Text="email-sai-dinh-dang" InputState="Error" KzSize="Md" />
+        <TextBlock Text="Email không đúng định dạng. Vui lòng kiểm tra lại."
+                   FontSize="12" Foreground="{StaticResource kz.brush.error}"
+                   Margin="4,0,0,0" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Disabled state" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzTextBox Text="Trường này không thể sửa" InputState="Disabled" KzSize="Md" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Password field" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzTextBox Watermark="Nhập mật khẩu" PasswordChar="●" KzSize="Md" />
+      </StackPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- KzComboBox (NEW) -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzComboBox — Select / Dropdown"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <TextBlock Text="Focus ring cam, hover border Navy700, chevron arrow. 3 sizes + Error/Disabled state."
+                   FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Size variants" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzComboBox KzSize="Sm" PlaceholderText="Chọn toà nhà..." Name="ComboSm">
+          <ComboBoxItem>Toà A — Vincom Đồng Khởi</ComboBoxItem>
+          <ComboBoxItem>Toà B — Bitexco</ComboBoxItem>
+          <ComboBoxItem>Toà C — Landmark 81</ComboBoxItem>
+        </kz:KzComboBox>
+        <kz:KzComboBox KzSize="Md" PlaceholderText="Chọn bãi đỗ xe..." Name="ComboMd">
+          <ComboBoxItem>Tầng B1 — Khu A</ComboBoxItem>
+          <ComboBoxItem>Tầng B1 — Khu B</ComboBoxItem>
+          <ComboBoxItem>Tầng B2 — Khu A</ComboBoxItem>
+          <ComboBoxItem>Tầng B2 — Khu B</ComboBoxItem>
+        </kz:KzComboBox>
+        <kz:KzComboBox KzSize="Lg" PlaceholderText="Chọn khu vực..." Name="ComboLg">
+          <ComboBoxItem>Miền Bắc — Hà Nội</ComboBoxItem>
+          <ComboBoxItem>Miền Trung — Đà Nẵng</ComboBoxItem>
+          <ComboBoxItem>Miền Nam — TP. Hồ Chí Minh</ComboBoxItem>
+        </kz:KzComboBox>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Error và Disabled" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzComboBox KzSize="Md" InputState="Error" PlaceholderText="Bắt buộc phải chọn">
+          <ComboBoxItem>Khu vực 1</ComboBoxItem>
+        </kz:KzComboBox>
+        <TextBlock Text="Vui lòng chọn khu vực."
+                   FontSize="12" Foreground="{StaticResource kz.brush.error}"
+                   Margin="4,0,0,0" />
+        <kz:KzComboBox KzSize="Md" InputState="Disabled" PlaceholderText="Không thể thay đổi">
+          <ComboBoxItem>Đã khoá</ComboBoxItem>
+        </kz:KzComboBox>
+      </StackPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- KzLink (NEW) -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzLink — Liên kết"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <TextBlock Text="Màu Navy700 mặc định. Hover: Orange500 + gạch chân. Transition 0.15s ease."
+                   FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+      </StackPanel>
+
+      <StackPanel Spacing="12">
+        <WrapPanel Orientation="Horizontal">
+          <kz:KzLink Content="Xem chi tiết →" Margin="0,0,24,0" />
+          <kz:KzLink Content="Tải xuống báo cáo" Margin="0,0,24,0" />
+          <kz:KzLink Content="Quên mật khẩu?" Margin="0,0,24,0" />
+          <kz:KzLink Content="Liên hệ hỗ trợ" IsEnabled="False" />
+        </WrapPanel>
+        <TextBlock Text="(Rê chuột lên link để thấy hover orange + gạch chân)"
+                   FontSize="12" Foreground="{StaticResource kz.brush.text.muted}"
+                   FontStyle="Italic" />
+      </StackPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- KzIPTextbox -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzIPTextbox — Địa chỉ IP"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <TextBlock Text="4 octet tự nhảy, chỉ nhận số, clamp 0-255. Viền cam khi focus, đỏ khi Error, mờ khi Disabled."
+                   FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Normal state" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzIPTextbox IPAddress="192.168.1.100" />
+        <kz:KzIPTextbox />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Size variants" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzIPTextbox KzSize="Sm" IPAddress="10.0.0.1" />
+        <kz:KzIPTextbox KzSize="Md" IPAddress="172.16.0.254" />
+        <kz:KzIPTextbox KzSize="Lg" IPAddress="192.168.100.1" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Error state" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzIPTextbox InputState="Error" IPAddress="10.256.1.1" />
+        <TextBlock Text="Địa chỉ IP không hợp lệ. Vui lòng kiểm tra lại."
+                   FontSize="12" Foreground="{StaticResource kz.brush.error}"
+                   Margin="4,0,0,0" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Disabled state" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzIPTextbox InputState="Disabled" IPAddress="192.168.1.1" />
+      </StackPanel>
+
+      <!-- KzIPTextbox trong context -->
+      <Border Background="{StaticResource kz.brush.white}"
+              BorderBrush="{StaticResource kz.brush.border}"
+              BorderThickness="1"
+              CornerRadius="{StaticResource kz.radius.lg}"
+              Padding="20">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Ví dụ cấu hình thiết bị" FontWeight="SemiBold"
+                     FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+          <StackPanel Spacing="4">
+            <TextBlock Text="Địa chỉ IP thiết bị" FontSize="12"
+                       Foreground="{StaticResource kz.brush.text.muted}" />
+            <kz:KzIPTextbox IPAddress="192.168.1.200" KzSize="Md" />
+          </StackPanel>
+          <StackPanel Spacing="4">
+            <TextBlock Text="Subnet mask" FontSize="12"
+                       Foreground="{StaticResource kz.brush.text.muted}" />
+            <kz:KzIPTextbox IPAddress="255.255.255.0" KzSize="Md" />
+          </StackPanel>
+          <StackPanel Spacing="4">
+            <TextBlock Text="Default gateway" FontSize="12"
+                       Foreground="{StaticResource kz.brush.text.muted}" />
+            <kz:KzIPTextbox IPAddress="192.168.1.1" KzSize="Md" />
+          </StackPanel>
+          <kz:KzButton Content="Lưu cấu hình" Variant="Primary" KzSize="Md"
+                       HorizontalAlignment="Stretch" />
+        </StackPanel>
+      </Border>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- KzNavigation -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzNavigation — Phân trang"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <TextBlock Text="First ◀◀, Prev ◀, manual page input, Next ▶, Last ▶▶. Viền cam khi focus, button tự disable tại trang đầu/cuối."
+                   FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+      </StackPanel>
+
+      <StackPanel Spacing="10">
+        <TextBlock Text="States" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <StackPanel Spacing="4">
+          <TextBlock Text="Default (trang 3 / 10)" FontSize="12"
+                     Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzNavigation CurrentPage="3" TotalPages="10" />
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Text="First page — First + Prev disabled" FontSize="12"
+                     Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzNavigation CurrentPage="1" TotalPages="10" />
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Text="Last page — Next + Last disabled" FontSize="12"
+                     Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzNavigation CurrentPage="10" TotalPages="10" />
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Text="Single page — all disabled" FontSize="12"
+                     Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzNavigation CurrentPage="1" TotalPages="1" />
+        </StackPanel>
+      </StackPanel>
+
+      <StackPanel Spacing="10">
+        <TextBlock Text="Sizes" FontWeight="SemiBold"
+                   FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+        <StackPanel Spacing="4">
+          <TextBlock Text="Small — 28px" FontSize="12"
+                     Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzNavigation KzSize="Sm" CurrentPage="5" TotalPages="20" />
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Text="Medium — 34px (default)" FontSize="12"
+                     Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzNavigation KzSize="Md" CurrentPage="5" TotalPages="20" />
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Text="Large — 40px" FontSize="12"
+                     Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzNavigation KzSize="Lg" CurrentPage="5" TotalPages="20" />
+        </StackPanel>
+      </StackPanel>
+
+      <!-- Context example -->
+      <Border Background="{StaticResource kz.brush.white}"
+              BorderBrush="{StaticResource kz.brush.border}"
+              BorderThickness="1"
+              CornerRadius="{StaticResource kz.radius.lg}"
+              Padding="20">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Ví dụ: bảng dữ liệu có phân trang" FontWeight="SemiBold"
+                     FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+          <Border Background="{StaticResource kz.brush.navy.100}"
+                  CornerRadius="{StaticResource kz.radius.sm}"
+                  Padding="12,8">
+            <TextBlock Text="Danh sách phương tiện — 247 bản ghi"
+                       FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+          </Border>
+          <TextBlock Text="[... 10 dòng dữ liệu ...]"
+                     FontSize="12" Foreground="{StaticResource kz.brush.text.muted}"
+                     FontStyle="Italic" TextAlignment="Center" Padding="0,8" />
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <kz:KzNavigation CurrentPage="3" TotalPages="25" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- KzLink trong context -->
+      <Border Background="{StaticResource kz.brush.white}"
+              BorderBrush="{StaticResource kz.brush.border}"
+              BorderThickness="1"
+              CornerRadius="{StaticResource kz.radius.lg}"
+              Padding="20">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Ví dụ trong form" FontWeight="SemiBold"
+                     FontSize="13" Foreground="{StaticResource kz.brush.navy.900}" />
+          <kz:KzTextBox Watermark="admin@kztek.net" KzSize="Md" />
+          <kz:KzTextBox Watermark="Nhập mật khẩu" PasswordChar="●" KzSize="Md" />
+          <kz:KzButton Content="Đăng nhập" Variant="Primary" KzSize="Md"
+                       HorizontalAlignment="Stretch" />
+          <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center">
+            <TextBlock Text="Chưa có tài khoản?" FontSize="13"
+                       Foreground="{StaticResource kz.brush.text.muted}"
+                       VerticalAlignment="Center" />
+            <kz:KzLink Content="Đăng ký ngay" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

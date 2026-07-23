@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls"
+             x:Class="KztekComponentAvalonia.Controls.KzToolBar">
+
+  <Border Background="{StaticResource kz.brush.navy.100}"
+          BorderBrush="{StaticResource kz.brush.border}"
+          BorderThickness="0,0,0,1"
+          Padding="8,6">
+    <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+
+      <!-- Add -->
+      <kz:KzButton Name="PART_BtnAdd"
+                   Variant="Primary" KzSize="Sm">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="+" FontWeight="Bold" />
+          <TextBlock Name="PART_LblAdd" Text="Thêm" />
+        </StackPanel>
+      </kz:KzButton>
+
+      <!-- Edit -->
+      <kz:KzButton Name="PART_BtnEdit"
+                   Variant="Secondary" KzSize="Sm">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="✏" />
+          <TextBlock Name="PART_LblEdit" Text="Sửa" />
+        </StackPanel>
+      </kz:KzButton>
+
+      <!-- Delete -->
+      <kz:KzButton Name="PART_BtnDelete"
+                   Variant="Danger" KzSize="Sm">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="🗑" />
+          <TextBlock Name="PART_LblDelete" Text="Xóa" />
+        </StackPanel>
+      </kz:KzButton>
+
+      <!-- Divider -->
+      <Border Name="PART_Divider"
+              Width="1" Margin="2,4"
+              Background="{StaticResource kz.brush.divider}" />
+
+      <!-- Refresh -->
+      <kz:KzButton Name="PART_BtnRefresh"
+                   Variant="Ghost" KzSize="Sm">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="↺" />
+          <TextBlock Name="PART_LblRefresh" Text="Làm mới" />
+        </StackPanel>
+      </kz:KzButton>
+
+      <!-- Import -->
+      <kz:KzButton Name="PART_BtnImport"
+                   Variant="Ghost" KzSize="Sm"
+                   IsVisible="False">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="📥" />
+          <TextBlock Name="PART_LblImport" Text="Import" />
+        </StackPanel>
+      </kz:KzButton>
+
+      <!-- Export -->
+      <kz:KzButton Name="PART_BtnExport"
+                   Variant="Ghost" KzSize="Sm"
+                   IsVisible="False">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="📤" />
+          <TextBlock Name="PART_LblExport" Text="Export" />
+        </StackPanel>
+      </kz:KzButton>
+
+    </StackPanel>
+  </Border>
+</UserControl>

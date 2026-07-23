@@ -1,0 +1,165 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia"
+             x:Class="KztekPreviewAvalonia.Pages.ButtonsPage">
+
+  <StackPanel Spacing="32">
+
+    <!-- Section header -->
+    <StackPanel Spacing="4">
+      <TextBlock Text="KzButton — Tất cả variant và size"
+                 FontSize="18" FontWeight="SemiBold"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <TextBlock Text="5 variants × 3 sizes = 15 buttons. Plus disabled state."
+                 FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+    </StackPanel>
+
+    <!-- Header row labels -->
+    <Grid ColumnDefinitions="120,*,*,*">
+      <TextBlock Grid.Column="0" Text="Variant / Size"
+                 FontWeight="SemiBold" Foreground="{StaticResource kz.brush.text.muted}"
+                 FontSize="12" VerticalAlignment="Center" />
+      <TextBlock Grid.Column="1" Text="Small (32px)"
+                 FontWeight="SemiBold" Foreground="{StaticResource kz.brush.text.muted}"
+                 FontSize="12" HorizontalAlignment="Center" />
+      <TextBlock Grid.Column="2" Text="Medium (40px)"
+                 FontWeight="SemiBold" Foreground="{StaticResource kz.brush.text.muted}"
+                 FontSize="12" HorizontalAlignment="Center" />
+      <TextBlock Grid.Column="3" Text="Large (48px)"
+                 FontWeight="SemiBold" Foreground="{StaticResource kz.brush.text.muted}"
+                 FontSize="12" HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Primary row -->
+    <Grid ColumnDefinitions="120,*,*,*">
+      <TextBlock Grid.Column="0" Text="Primary"
+                 FontWeight="Medium" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <kz:KzButton Grid.Column="1" Content="Primary Sm"
+                   Variant="Primary" KzSize="Sm" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="2" Content="Primary Md"
+                   Variant="Primary" KzSize="Md" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="3" Content="Primary Lg"
+                   Variant="Primary" KzSize="Lg" HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Accent row -->
+    <Grid ColumnDefinitions="120,*,*,*">
+      <TextBlock Grid.Column="0" Text="Accent"
+                 FontWeight="Medium" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.orange.500}" />
+      <kz:KzButton Grid.Column="1" Content="Accent Sm"
+                   Variant="Accent" KzSize="Sm" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="2" Content="Accent Md"
+                   Variant="Accent" KzSize="Md" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="3" Content="Accent Lg"
+                   Variant="Accent" KzSize="Lg" HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Secondary row -->
+    <Grid ColumnDefinitions="120,*,*,*">
+      <TextBlock Grid.Column="0" Text="Secondary"
+                 FontWeight="Medium" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <kz:KzButton Grid.Column="1" Content="Secondary Sm"
+                   Variant="Secondary" KzSize="Sm" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="2" Content="Secondary Md"
+                   Variant="Secondary" KzSize="Md" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="3" Content="Secondary Lg"
+                   Variant="Secondary" KzSize="Lg" HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Ghost row -->
+    <Grid ColumnDefinitions="120,*,*,*">
+      <TextBlock Grid.Column="0" Text="Ghost"
+                 FontWeight="Medium" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <kz:KzButton Grid.Column="1" Content="Ghost Sm"
+                   Variant="Ghost" KzSize="Sm" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="2" Content="Ghost Md"
+                   Variant="Ghost" KzSize="Md" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="3" Content="Ghost Lg"
+                   Variant="Ghost" KzSize="Lg" HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Danger row -->
+    <Grid ColumnDefinitions="120,*,*,*">
+      <TextBlock Grid.Column="0" Text="Danger"
+                 FontWeight="Medium" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.error}" />
+      <kz:KzButton Grid.Column="1" Content="Danger Sm"
+                   Variant="Danger" KzSize="Sm" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="2" Content="Danger Md"
+                   Variant="Danger" KzSize="Md" HorizontalAlignment="Center" />
+      <kz:KzButton Grid.Column="3" Content="Danger Lg"
+                   Variant="Danger" KzSize="Lg" HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Divider -->
+    <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+    <!-- Disabled states -->
+    <StackPanel Spacing="8">
+      <TextBlock Text="Disabled states"
+                 FontSize="14" FontWeight="SemiBold"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <WrapPanel Orientation="Horizontal" ItemWidth="160">
+        <kz:KzButton Content="Primary Disabled" Variant="Primary" IsEnabled="False" Margin="0,0,8,8" />
+        <kz:KzButton Content="Accent Disabled" Variant="Accent" IsEnabled="False" Margin="0,0,8,8" />
+        <kz:KzButton Content="Secondary Disabled" Variant="Secondary" IsEnabled="False" Margin="0,0,8,8" />
+        <kz:KzButton Content="Danger Disabled" Variant="Danger" IsEnabled="False" Margin="0,0,8,8" />
+      </WrapPanel>
+    </StackPanel>
+
+    <!-- Divider -->
+    <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+    <!-- Keyboard Shortcuts (HotKey) -->
+    <StackPanel Spacing="12">
+      <StackPanel Spacing="4">
+        <TextBlock Text="Keyboard Shortcuts (HotKey)"
+                   FontSize="14" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <TextBlock Text="Đặt HotKey=&quot;Ctrl+S&quot; / &quot;Escape&quot; / &quot;F1&quot; — kích hoạt từ bất kỳ đâu trong window."
+                   FontSize="12" Foreground="{StaticResource kz.brush.text.muted}" />
+      </StackPanel>
+
+      <WrapPanel Orientation="Horizontal">
+        <kz:KzButton x:Name="BtnSave"
+                     Content="Lưu  [Ctrl+S]"
+                     Variant="Primary" KzSize="Md"
+                     HotKey="Ctrl+S"
+                     Margin="0,0,8,8"
+                     Click="OnBtnSaveClick" />
+        <kz:KzButton x:Name="BtnCancel"
+                     Content="Hủy  [Esc]"
+                     Variant="Secondary" KzSize="Md"
+                     HotKey="Escape"
+                     Margin="0,0,8,8"
+                     Click="OnBtnCancelClick" />
+        <kz:KzButton x:Name="BtnHelp"
+                     Content="Trợ giúp  [F1]"
+                     Variant="Ghost" KzSize="Md"
+                     HotKey="F1"
+                     Margin="0,0,8,8"
+                     Click="OnBtnHelpClick" />
+      </WrapPanel>
+
+      <!-- Status feedback -->
+      <Border Background="{StaticResource kz.brush.navy.100}"
+              CornerRadius="6" Padding="12,8">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock Text="Phím vừa nhấn:"
+                     FontSize="13" VerticalAlignment="Center"
+                     Foreground="{StaticResource kz.brush.text.muted}" />
+          <TextBlock x:Name="ShortcutStatusText"
+                     Text="(chưa có)"
+                     FontSize="13" FontWeight="SemiBold"
+                     Foreground="{StaticResource kz.brush.navy.900}"
+                     VerticalAlignment="Center" />
+        </StackPanel>
+      </Border>
+    </StackPanel>
+
+  </StackPanel>
+</UserControl>

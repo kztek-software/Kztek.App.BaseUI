@@ -1,0 +1,79 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia">
+
+  <!-- ── KzComboBox — Item styles (must be in Styles, not ControlTheme) ── -->
+  <Style Selector="kz|KzComboBox ComboBoxItem">
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="FontSize" Value="{StaticResource kz.font.md}" />
+    <Setter Property="Foreground" Value="{StaticResource kz.brush.text}" />
+  </Style>
+  <Style Selector="kz|KzComboBox ComboBoxItem:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource kz.brush.navy.100}" />
+  </Style>
+  <Style Selector="kz|KzComboBox ComboBoxItem:selected /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource kz.brush.navy.100}" />
+    <Setter Property="TextElement.Foreground" Value="{StaticResource kz.brush.navy.900}" />
+    <Setter Property="TextElement.FontWeight" Value="SemiBold" />
+  </Style>
+
+
+  <!-- ── Column Header ── -->
+  <Style Selector="DataGrid.kz-grid DataGridColumnHeader">
+    <Setter Property="Background" Value="{StaticResource kz.brush.navy.900}" />
+    <Setter Property="Foreground" Value="{StaticResource kz.brush.white}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="FontSize" Value="{StaticResource kz.font.sm}" />
+    <Setter Property="Padding" Value="8,3" />
+    <Setter Property="MinHeight" Value="26" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+  </Style>
+
+  <Style Selector="DataGrid.kz-grid DataGridColumnHeader:pointerover">
+    <Setter Property="Background" Value="{StaticResource kz.brush.navy.700}" />
+  </Style>
+
+  <!-- ── Body Row ── -->
+  <Style Selector="DataGrid.kz-grid DataGridRow">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource kz.brush.text}" />
+    <Setter Property="MinHeight" Value="26" />
+  </Style>
+
+  <!-- Alternating rows -->
+  <Style Selector="DataGrid.kz-grid DataGridRow:nth-child(2n) /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill" Value="{StaticResource kz.brush.navy.100}" />
+    <Setter Property="Opacity" Value="0.5" />
+  </Style>
+
+  <!-- Row hover -->
+  <Style Selector="DataGrid.kz-grid DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill" Value="{StaticResource kz.brush.navy.100}" />
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+
+  <!-- Selected row -->
+  <Style Selector="DataGrid.kz-grid DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill" Value="{StaticResource kz.brush.orange.300}" />
+    <Setter Property="Opacity" Value="0.4" />
+  </Style>
+
+  <!-- ── Cell ── -->
+  <Style Selector="DataGrid.kz-grid DataGridCell">
+    <Setter Property="Padding" Value="8,2" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+    <Setter Property="BorderBrush" Value="{StaticResource kz.brush.border}" />
+    <Setter Property="FontSize" Value="{StaticResource kz.font.sm}" />
+  </Style>
+
+  <!-- ── DataGrid base ── -->
+  <Style Selector="DataGrid.kz-grid">
+    <Setter Property="BorderBrush" Value="{StaticResource kz.brush.border}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="RowBackground" Value="Transparent" />
+    <Setter Property="GridLinesVisibility" Value="Horizontal" />
+    <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource kz.brush.border}" />
+    <Setter Property="VerticalGridLinesBrush" Value="Transparent" />
+  </Style>
+
+</Styles>

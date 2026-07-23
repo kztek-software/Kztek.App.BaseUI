@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls"
+             x:Class="KztekComponentAvalonia.Controls.KzCutImage">
+
+  <Grid RowDefinitions="*,Auto">
+
+    <!-- ── Image + drag-select overlay ─────────────────────────────── -->
+    <Grid Grid.Row="0" Name="PART_ImageContainer"
+          ClipToBounds="True"
+          Background="{StaticResource kz.brush.neutral.bg}">
+
+      <Image Name="PART_Image"
+             Stretch="Uniform"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center" />
+
+      <!-- Selection overlay canvas -->
+      <Canvas Name="PART_OverlayCanvas"
+              Background="Transparent"
+              Cursor="Crosshair"
+              ClipToBounds="True" />
+
+      <!-- Selection rectangle -->
+      <Border Name="PART_SelectionRect"
+              IsVisible="False"
+              BorderBrush="{StaticResource kz.brush.orange.500}"
+              BorderThickness="2"
+              Background="#33F05922"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              IsHitTestVisible="False" />
+
+    </Grid>
+
+    <!-- ── Action bar ────────────────────────────────────────────── -->
+    <Border Grid.Row="1"
+            Background="{StaticResource kz.brush.navy.100}"
+            BorderBrush="{StaticResource kz.brush.border}"
+            BorderThickness="0,1,0,0"
+            Padding="12,8">
+      <Grid ColumnDefinitions="*,Auto,8,Auto">
+
+        <!-- Selection info -->
+        <TextBlock Grid.Column="0"
+                   Name="PART_TxtInfo"
+                   Text="Kéo để chọn vùng cắt"
+                   Foreground="{StaticResource kz.brush.text.muted}"
+                   FontSize="12"
+                   VerticalAlignment="Center" />
+
+        <!-- Crop button -->
+        <kz:KzButton Grid.Column="1"
+                     Name="PART_BtnCrop"
+                     Variant="Accent" KzSize="Sm"
+                     Content="✂ Cắt ảnh"
+                     IsEnabled="False" />
+
+        <!-- Cancel button -->
+        <kz:KzButton Grid.Column="3"
+                     Name="PART_BtnCancel"
+                     Variant="Ghost" KzSize="Sm"
+                     Content="✕ Hủy" />
+
+      </Grid>
+    </Border>
+
+  </Grid>
+</UserControl>

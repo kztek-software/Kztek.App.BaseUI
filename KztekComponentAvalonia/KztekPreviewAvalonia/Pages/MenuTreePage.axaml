@@ -1,0 +1,100 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia"
+             x:Class="KztekPreviewAvalonia.Pages.MenuTreePage">
+
+  <DockPanel>
+
+    <!-- ── KzMenu bar docked to top ──────────────────────────────────────── -->
+    <kz:KzMenu DockPanel.Dock="Top">
+      <MenuItem Header="Tệp">
+        <MenuItem Header="Mở…" />
+        <MenuItem Header="Lưu" />
+        <Separator />
+        <MenuItem Header="Thoát" />
+      </MenuItem>
+      <MenuItem Header="Thiết bị">
+        <MenuItem Header="Thêm thiết bị…" />
+        <MenuItem Header="Kết nối lại" />
+        <Separator />
+        <MenuItem Header="Cài đặt…" />
+      </MenuItem>
+      <MenuItem Header="Báo cáo">
+        <MenuItem Header="Xe vào/ra hôm nay" />
+        <MenuItem Header="Doanh thu tháng" />
+      </MenuItem>
+      <MenuItem Header="Trợ giúp">
+        <MenuItem Header="Hướng dẫn sử dụng" />
+        <MenuItem Header="Giới thiệu…" />
+      </MenuItem>
+    </kz:KzMenu>
+
+    <!-- ── Content area ───────────────────────────────────────────────────── -->
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto"
+                  Padding="0,0,0,24">
+      <StackPanel Spacing="32">
+
+        <!-- KzMenu section -->
+        <StackPanel Spacing="4">
+          <TextBlock Text="KzMenu — Menu bar kiểu KZTEK"
+                     FontSize="20" FontWeight="Bold"
+                     Foreground="{StaticResource kz.brush.navy.900}" />
+          <TextBlock Text="Navy900 background, Orange accent, White text. Hover tints + dropdown nền trắng."
+                     FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+          <TextBlock Text="→ Thanh menu phía trên đây là KzMenu đang hoạt động."
+                     FontSize="12" Foreground="{StaticResource kz.brush.orange.500}"
+                     FontStyle="Italic" />
+        </StackPanel>
+
+        <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+        <!-- KzDeviceTree section -->
+        <StackPanel Spacing="4">
+          <TextBlock Text="KzDeviceTree — Cây thiết bị"
+                     FontSize="20" FontWeight="Bold"
+                     Foreground="{StaticResource kz.brush.navy.900}" />
+          <TextBlock Text="Owner-styled TreeView với icon thiết bị và chấm trạng thái online/offline/warning."
+                     FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+        </StackPanel>
+
+        <Grid ColumnDefinitions="*,Auto" MinHeight="500">
+
+          <!-- Tree -->
+          <kz:KzDeviceTree Name="DeviceTree"
+                           ShowHeader="True"
+                           HeaderText="Hệ thống bãi đỗ xe"
+                           MinWidth="340"
+                           MaxWidth="460" />
+
+          <!-- Detail panel -->
+          <Border Grid.Column="1"
+                  Width="320"
+                  Margin="16,0,0,0"
+                  Background="{StaticResource kz.brush.white}"
+                  BorderBrush="{StaticResource kz.brush.border}"
+                  BorderThickness="1"
+                  CornerRadius="{StaticResource kz.radius.lg}"
+                  Padding="20"
+                  VerticalAlignment="Top"
+                  BoxShadow="{StaticResource kz.shadow.sm}">
+            <StackPanel Spacing="12">
+              <TextBlock Text="Chi tiết thiết bị"
+                         FontSize="14" FontWeight="SemiBold"
+                         Foreground="{StaticResource kz.brush.navy.900}" />
+              <Border Height="1" Background="{StaticResource kz.brush.border}" />
+              <TextBlock Name="DetailText"
+                         Text="Chọn một thiết bị để xem thông tin chi tiết."
+                         FontSize="13"
+                         Foreground="{StaticResource kz.brush.text.muted}"
+                         TextWrapping="Wrap" />
+            </StackPanel>
+          </Border>
+
+        </Grid>
+
+      </StackPanel>
+    </ScrollViewer>
+
+  </DockPanel>
+</UserControl>

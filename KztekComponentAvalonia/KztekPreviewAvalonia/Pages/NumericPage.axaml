@@ -1,0 +1,122 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia"
+             x:Class="KztekPreviewAvalonia.Pages.NumericPage">
+
+  <StackPanel Spacing="32">
+
+    <StackPanel Spacing="4">
+      <TextBlock Text="KzNumericUpDown — Horizontal và Vertical layout"
+                 FontSize="18" FontWeight="SemiBold"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <TextBlock Text="3 variants (Default/Navy/Accent) × 2 layouts. Có suffix label và giới hạn Min/Max."
+                 FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+    </StackPanel>
+
+    <StackPanel Spacing="4">
+      <TextBlock Text="Horizontal layout" FontWeight="SemiBold"
+                 FontSize="14" Foreground="{StaticResource kz.brush.navy.900}" />
+    </StackPanel>
+
+    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
+      <TextBlock Grid.Row="0" Grid.Column="0" Text="Default:"
+                 VerticalAlignment="Center" Margin="0,0,20,16"
+                 Foreground="{StaticResource kz.brush.text.muted}" FontSize="13" />
+      <kz:KzNumericUpDown Grid.Row="0" Grid.Column="1"
+                          HorizontalAlignment="Left"
+                          Layout="Horizontal" Variant="Default"
+                          Value="5" Min="0" Max="100" Step="1"
+                          Suffix="đơn vị"
+                          Margin="0,0,0,16" />
+
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="Navy:"
+                 VerticalAlignment="Center" Margin="0,0,20,16"
+                 Foreground="{StaticResource kz.brush.text.muted}" FontSize="13" />
+      <kz:KzNumericUpDown Grid.Row="1" Grid.Column="1"
+                          HorizontalAlignment="Left"
+                          Layout="Horizontal" Variant="Navy"
+                          Value="10" Min="0" Max="50" Step="5"
+                          Suffix="cái"
+                          Margin="0,0,0,16" />
+
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="Accent:"
+                 VerticalAlignment="Center" Margin="0,0,20,0"
+                 Foreground="{StaticResource kz.brush.text.muted}" FontSize="13" />
+      <kz:KzNumericUpDown Grid.Row="2" Grid.Column="1"
+                          HorizontalAlignment="Left"
+                          Layout="Horizontal" Variant="Accent"
+                          Value="3" Min="1" Max="20" Step="1"
+                          Suffix="tháng" />
+    </Grid>
+
+    <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+    <StackPanel Spacing="4">
+      <TextBlock Text="Vertical layout" FontWeight="SemiBold"
+                 FontSize="14" Foreground="{StaticResource kz.brush.navy.900}" />
+    </StackPanel>
+
+    <WrapPanel Orientation="Horizontal" ItemHeight="160">
+      <StackPanel Spacing="8" Margin="0,0,32,0" HorizontalAlignment="Center">
+        <TextBlock Text="Default" FontSize="12"
+                   Foreground="{StaticResource kz.brush.text.muted}"
+                   HorizontalAlignment="Center" />
+        <kz:KzNumericUpDown Layout="Vertical" Variant="Default"
+                            Value="5" Min="0" Max="99" Step="1"
+                            HorizontalAlignment="Center" />
+      </StackPanel>
+      <StackPanel Spacing="8" Margin="0,0,32,0" HorizontalAlignment="Center">
+        <TextBlock Text="Navy" FontSize="12"
+                   Foreground="{StaticResource kz.brush.text.muted}"
+                   HorizontalAlignment="Center" />
+        <kz:KzNumericUpDown Layout="Vertical" Variant="Navy"
+                            Value="10" Min="0" Max="99" Step="5"
+                            HorizontalAlignment="Center" />
+      </StackPanel>
+      <StackPanel Spacing="8" HorizontalAlignment="Center">
+        <TextBlock Text="Accent" FontSize="12"
+                   Foreground="{StaticResource kz.brush.text.muted}"
+                   HorizontalAlignment="Center" />
+        <kz:KzNumericUpDown Layout="Vertical" Variant="Accent"
+                            Value="3" Min="1" Max="10" Step="1"
+                            Suffix="tháng"
+                            HorizontalAlignment="Center" />
+      </StackPanel>
+    </WrapPanel>
+
+    <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+    <StackPanel Spacing="8">
+      <TextBlock Text="Ví dụ: Đặt số lượng sản phẩm"
+                 FontSize="14" FontWeight="SemiBold"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <Border Background="{StaticResource kz.brush.white}"
+              BorderBrush="{StaticResource kz.brush.border}"
+              BorderThickness="1"
+              CornerRadius="{StaticResource kz.radius.lg}"
+              Padding="20">
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+          <StackPanel Grid.Column="0" Grid.Row="0" Spacing="4">
+            <TextBlock Text="Camera IP KZTEK KZ-4K01"
+                       FontSize="15" FontWeight="SemiBold"
+                       Foreground="{StaticResource kz.brush.navy.900}" />
+            <TextBlock Text="Giá: 2.500.000 VNĐ / cái"
+                       FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+          </StackPanel>
+          <kz:KzNumericUpDown Grid.Column="1" Grid.Row="0"
+                              Layout="Horizontal" Variant="Navy"
+                              Value="1" Min="1" Max="999" Step="1"
+                              Suffix="cái"
+                              VerticalAlignment="Center" />
+          <kz:KzButton Grid.Column="0" Grid.Row="1"
+                       Grid.ColumnSpan="2"
+                       Content="Thêm vào giỏ hàng"
+                       Variant="Accent" KzSize="Md"
+                       Margin="0,12,0,0"
+                       HorizontalAlignment="Right" />
+        </Grid>
+      </Border>
+    </StackPanel>
+
+  </StackPanel>
+</UserControl>

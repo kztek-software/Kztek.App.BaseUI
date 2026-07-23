@@ -1,0 +1,97 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia"
+             x:Class="KztekPreviewAvalonia.Pages.CardsPage">
+
+  <StackPanel Spacing="32">
+
+    <StackPanel Spacing="4">
+      <TextBlock Text="KzCard — 3 variants"
+                 FontSize="18" FontWeight="SemiBold"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <TextBlock Text="Default (white), Dark (Navy900), Feature (Orange500). Có CardContent slot."
+                 FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+    </StackPanel>
+
+    <Grid ColumnDefinitions="*,*,*">
+      <!-- Default card -->
+      <kz:KzCard Grid.Column="0"
+                 Variant="Default"
+                 CardIcon="📷"
+                 CardTitle="Camera IP Ngoài Trời"
+                 CardText="Camera IP ngoài trời 4K chống nước IP67, tầm nhìn ban đêm 30m, hỗ trợ AI nhận diện."
+                 Margin="0,0,16,0">
+        <kz:KzCard.CardContent>
+          <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+            <kz:KzButton Content="Chi tiết" Variant="Primary" KzSize="Sm" />
+            <kz:KzButton Content="Thêm vào giỏ" Variant="Secondary" KzSize="Sm" />
+          </StackPanel>
+        </kz:KzCard.CardContent>
+      </kz:KzCard>
+
+      <!-- Dark card -->
+      <kz:KzCard Grid.Column="1"
+                 Variant="Dark"
+                 CardIcon="🎥"
+                 CardTitle="Bộ Ghi Hình NVR"
+                 CardText="Bộ ghi hình NVR 16 kênh, hỗ trợ camera 4K, lưu trữ RAID, xem từ xa qua ứng dụng."
+                 Margin="0,0,16,0">
+        <kz:KzCard.CardContent>
+          <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+            <kz:KzButton Content="Xem thêm" Variant="Accent" KzSize="Sm" />
+          </StackPanel>
+        </kz:KzCard.CardContent>
+      </kz:KzCard>
+
+      <!-- Feature card -->
+      <kz:KzCard Grid.Column="2"
+                 Variant="Feature"
+                 CardIcon="🏢"
+                 CardTitle="Giải Pháp Toàn Diện"
+                 CardText="Triển khai hệ thống camera giám sát toàn diện cho nhà máy, văn phòng và kho bãi.">
+        <kz:KzCard.CardContent>
+          <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+            <kz:KzButton Content="Liên hệ ngay" Variant="Primary" KzSize="Sm" />
+          </StackPanel>
+        </kz:KzCard.CardContent>
+      </kz:KzCard>
+    </Grid>
+
+    <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+    <StackPanel Spacing="4">
+      <TextBlock Text="KzKpiCard — Dashboard KPI"
+                 FontSize="18" FontWeight="SemiBold"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <TextBlock Text="Hiển thị chỉ số với delta % so sánh kỳ trước."
+                 FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+    </StackPanel>
+
+    <Grid ColumnDefinitions="*,*,*,*">
+      <kz:KzKpiCard Grid.Column="0"
+                    Label="Doanh thu tháng"
+                    Value="2.4 tỷ"
+                    Delta="12.5"
+                    Subtitle="so tháng trước"
+                    Margin="0,0,12,0" />
+      <kz:KzKpiCard Grid.Column="1"
+                    Label="Đơn hàng mới"
+                    Value="1.284"
+                    Delta="8.2"
+                    Subtitle="so tháng trước"
+                    Margin="0,0,12,0" />
+      <kz:KzKpiCard Grid.Column="2"
+                    Label="Khách hàng"
+                    Value="847"
+                    Delta="-3.1"
+                    Subtitle="so tháng trước"
+                    Margin="0,0,12,0" />
+      <kz:KzKpiCard Grid.Column="3"
+                    Label="Tỷ lệ chuyển đổi"
+                    Value="68.4%"
+                    Delta="0.0"
+                    Subtitle="không đổi" />
+    </Grid>
+
+  </StackPanel>
+</UserControl>

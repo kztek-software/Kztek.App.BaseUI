@@ -1,0 +1,38 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia">
+
+  <!-- ── TabControl container ── -->
+  <Style Selector="kz|KzTabControl">
+    <Setter Property="TabStripPlacement" Value="Top" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <!-- ── Tab item base ── -->
+  <Style Selector="kz|KzTabControl TabItem">
+    <Setter Property="Height"    Value="44" />
+    <Setter Property="Padding"   Value="16,0" />
+    <Setter Property="FontSize"  Value="{StaticResource kz.font.md}" />
+    <Setter Property="Cursor"    Value="Hand" />
+    <Setter Property="Foreground" Value="{StaticResource kz.brush.text.muted}" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <!-- ── Hover ── -->
+  <Style Selector="kz|KzTabControl TabItem:pointerover">
+    <Setter Property="Foreground" Value="{StaticResource kz.brush.text}" />
+  </Style>
+
+  <!-- ── Selected / active ── -->
+  <Style Selector="kz|KzTabControl TabItem:selected">
+    <Setter Property="Foreground"  Value="{StaticResource kz.brush.navy.900}" />
+    <Setter Property="FontWeight"  Value="SemiBold" />
+  </Style>
+
+  <!-- ── Active underline via template part ── -->
+  <Style Selector="kz|KzTabControl TabItem:selected /template/ Border#PART_SelectedPipe">
+    <Setter Property="Background" Value="{StaticResource kz.brush.orange.500}" />
+    <Setter Property="Height"     Value="3" />
+  </Style>
+
+</Styles>

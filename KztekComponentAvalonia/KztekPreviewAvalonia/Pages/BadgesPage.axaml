@@ -1,0 +1,123 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia"
+             x:Class="KztekPreviewAvalonia.Pages.BadgesPage">
+
+  <StackPanel Spacing="32">
+
+    <StackPanel Spacing="4">
+      <TextBlock Text="KzBadge — 6 variants × 2 types"
+                 FontSize="18" FontWeight="SemiBold"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <TextBlock Text="StatusPill (border-radius: 9999) và Tag (border-radius: 4)"
+                 FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+    </StackPanel>
+
+    <!-- Column headers -->
+    <Grid ColumnDefinitions="120,*,*">
+      <TextBlock Grid.Column="0" Text="Variant"
+                 FontWeight="SemiBold" Foreground="{StaticResource kz.brush.text.muted}" FontSize="12" />
+      <TextBlock Grid.Column="1" Text="StatusPill"
+                 FontWeight="SemiBold" Foreground="{StaticResource kz.brush.text.muted}" FontSize="12"
+                 HorizontalAlignment="Center" />
+      <TextBlock Grid.Column="2" Text="Tag"
+                 FontWeight="SemiBold" Foreground="{StaticResource kz.brush.text.muted}" FontSize="12"
+                 HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Success -->
+    <Grid ColumnDefinitions="120,*,*">
+      <TextBlock Grid.Column="0" Text="Success" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.success}" FontWeight="Medium" />
+      <kz:KzBadge Grid.Column="1" Content="Hoạt động" Variant="Success" BadgeType="StatusPill"
+                  HorizontalAlignment="Center" />
+      <kz:KzBadge Grid.Column="2" Content="Success" Variant="Success" BadgeType="Tag"
+                  HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Warning -->
+    <Grid ColumnDefinitions="120,*,*">
+      <TextBlock Grid.Column="0" Text="Warning" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.warning}" FontWeight="Medium" />
+      <kz:KzBadge Grid.Column="1" Content="Chờ xử lý" Variant="Warning" BadgeType="StatusPill"
+                  HorizontalAlignment="Center" />
+      <kz:KzBadge Grid.Column="2" Content="Warning" Variant="Warning" BadgeType="Tag"
+                  HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Error -->
+    <Grid ColumnDefinitions="120,*,*">
+      <TextBlock Grid.Column="0" Text="Error" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.error}" FontWeight="Medium" />
+      <kz:KzBadge Grid.Column="1" Content="Lỗi hệ thống" Variant="Error" BadgeType="StatusPill"
+                  HorizontalAlignment="Center" />
+      <kz:KzBadge Grid.Column="2" Content="Error" Variant="Error" BadgeType="Tag"
+                  HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Info -->
+    <Grid ColumnDefinitions="120,*,*">
+      <TextBlock Grid.Column="0" Text="Info" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.info}" FontWeight="Medium" />
+      <kz:KzBadge Grid.Column="1" Content="Thông báo" Variant="Info" BadgeType="StatusPill"
+                  HorizontalAlignment="Center" />
+      <kz:KzBadge Grid.Column="2" Content="Info" Variant="Info" BadgeType="Tag"
+                  HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Neutral -->
+    <Grid ColumnDefinitions="120,*,*">
+      <TextBlock Grid.Column="0" Text="Neutral" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.text.muted}" FontWeight="Medium" />
+      <kz:KzBadge Grid.Column="1" Content="Không xác định" Variant="Neutral" BadgeType="StatusPill"
+                  HorizontalAlignment="Center" />
+      <kz:KzBadge Grid.Column="2" Content="Neutral" Variant="Neutral" BadgeType="Tag"
+                  HorizontalAlignment="Center" />
+    </Grid>
+
+    <!-- Accent -->
+    <Grid ColumnDefinitions="120,*,*">
+      <TextBlock Grid.Column="0" Text="Accent" VerticalAlignment="Center"
+                 Foreground="{StaticResource kz.brush.orange.500}" FontWeight="Medium" />
+      <kz:KzBadge Grid.Column="1" Content="KZTEK" Variant="Accent" BadgeType="StatusPill"
+                  HorizontalAlignment="Center" />
+      <kz:KzBadge Grid.Column="2" Content="Accent" Variant="Accent" BadgeType="Tag"
+                  HorizontalAlignment="Center" />
+    </Grid>
+
+    <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+    <!-- Badge in context -->
+    <StackPanel Spacing="8">
+      <TextBlock Text="Badge trong context — danh sách sản phẩm"
+                 FontSize="14" FontWeight="SemiBold"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+      <Border Background="{StaticResource kz.brush.white}"
+              BorderBrush="{StaticResource kz.brush.border}"
+              BorderThickness="1"
+              CornerRadius="{StaticResource kz.radius.md}"
+              Padding="16">
+        <StackPanel Spacing="12">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0" Text="Camera IP KZTEK KZ-4K01"
+                       VerticalAlignment="Center" Foreground="{StaticResource kz.brush.text}" />
+            <kz:KzBadge Grid.Column="1" Content="Còn hàng" Variant="Success" BadgeType="StatusPill" />
+          </Grid>
+          <Border Height="1" Background="{StaticResource kz.brush.border}" />
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0" Text="Bộ ghi hình KZ-DVR16"
+                       VerticalAlignment="Center" Foreground="{StaticResource kz.brush.text}" />
+            <kz:KzBadge Grid.Column="1" Content="Hết hàng" Variant="Error" BadgeType="StatusPill" />
+          </Grid>
+          <Border Height="1" Background="{StaticResource kz.brush.border}" />
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0" Text="Đầu ghi NVR 8 kênh"
+                       VerticalAlignment="Center" Foreground="{StaticResource kz.brush.text}" />
+            <kz:KzBadge Grid.Column="1" Content="Sắp về" Variant="Warning" BadgeType="StatusPill" />
+          </Grid>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+
+  </StackPanel>
+</UserControl>

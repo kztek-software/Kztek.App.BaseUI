@@ -1,0 +1,99 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia">
+
+  <!-- ── KzMenu bar background ─────────────────────────────────────────────── -->
+  <Style Selector="kz|KzMenu">
+    <Setter Property="Background" Value="{DynamicResource kz.brush.navy.900}" />
+    <Setter Property="Foreground" Value="{DynamicResource kz.brush.white}" />
+    <Setter Property="Padding"    Value="4,0" />
+    <Setter Property="Height"     Value="44" />
+  </Style>
+
+  <!-- ── Top-level MenuItem inside KzMenu ──────────────────────────────────── -->
+  <Style Selector="kz|KzMenu > MenuItem">
+    <Setter Property="Foreground"  Value="{DynamicResource kz.brush.white}" />
+    <Setter Property="FontSize"    Value="{DynamicResource kz.font.md}" />
+    <Setter Property="Height"      Value="44" />
+    <Setter Property="Padding"     Value="16,0" />
+    <Setter Property="Background"  Value="Transparent" />
+    <Setter Property="Cursor"      Value="Hand" />
+  </Style>
+
+  <!-- Top-level hover — subtle white tint -->
+  <Style Selector="kz|KzMenu > MenuItem:pointerover /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="#22FFFFFF" />
+  </Style>
+
+  <Style Selector="kz|KzMenu > MenuItem:selected /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="#22FFFFFF" />
+  </Style>
+
+  <!-- Top-level open (submenu visible) -->
+  <Style Selector="kz|KzMenu > MenuItem:open /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="{DynamicResource kz.brush.navy.hover}" />
+  </Style>
+
+  <!-- Hide expand arrow on top-level menu bar items (Fluent: PathIcon#ArrowDecoration, Simple: Path#Arrow) -->
+  <Style Selector="kz|KzMenu > MenuItem /template/ PathIcon#ArrowDecoration">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector="kz|KzMenu > MenuItem /template/ Path#Arrow">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+
+  <!-- Show arrows on nested sub-menu items (inside dropdown) -->
+  <Style Selector="kz|KzMenu > MenuItem MenuItem /template/ PathIcon#ArrowDecoration">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
+  <Style Selector="kz|KzMenu > MenuItem MenuItem /template/ Path#Arrow">
+    <Setter Property="IsVisible" Value="True" />
+    <Setter Property="Fill" Value="{DynamicResource kz.brush.text.muted}" />
+  </Style>
+
+  <!-- ── Popup / Dropdown panel ────────────────────────────────────────────── -->
+  <Style Selector="kz|KzMenu > MenuItem > Popup > Border">
+    <Setter Property="Background"       Value="{DynamicResource kz.brush.white}" />
+    <Setter Property="BorderBrush"      Value="{DynamicResource kz.brush.border}" />
+    <Setter Property="BorderThickness"  Value="1" />
+    <Setter Property="CornerRadius"     Value="8" />
+    <Setter Property="BoxShadow"        Value="{DynamicResource kz.shadow.lg}" />
+    <Setter Property="Padding"          Value="4" />
+  </Style>
+
+  <!-- ── Nested MenuItem (dropdown items) ──────────────────────────────────── -->
+  <Style Selector="kz|KzMenu > MenuItem MenuItem">
+    <Setter Property="Foreground"  Value="{DynamicResource kz.brush.text}" />
+    <Setter Property="FontSize"    Value="{DynamicResource kz.font.md}" />
+    <Setter Property="Padding"     Value="12,8" />
+    <Setter Property="MinHeight"   Value="36" />
+    <Setter Property="Background"  Value="Transparent" />
+    <Setter Property="Cursor"      Value="Hand" />
+  </Style>
+
+  <Style Selector="kz|KzMenu > MenuItem MenuItem:pointerover /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background"    Value="{DynamicResource kz.brush.navy.100}" />
+    <Setter Property="CornerRadius"  Value="6" />
+  </Style>
+
+  <Style Selector="kz|KzMenu > MenuItem MenuItem:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource kz.brush.navy.900}" />
+  </Style>
+
+  <!-- Separator inside dropdown -->
+  <Style Selector="kz|KzMenu > MenuItem Separator">
+    <Setter Property="Background" Value="{DynamicResource kz.brush.border}" />
+    <Setter Property="Height"     Value="1" />
+    <Setter Property="Margin"     Value="8,4" />
+  </Style>
+
+  <!-- Disabled items -->
+  <Style Selector="kz|KzMenu > MenuItem:disabled">
+    <Setter Property="Opacity" Value="0.45" />
+  </Style>
+
+  <Style Selector="kz|KzMenu > MenuItem MenuItem:disabled">
+    <Setter Property="Opacity" Value="0.45" />
+  </Style>
+
+</Styles>

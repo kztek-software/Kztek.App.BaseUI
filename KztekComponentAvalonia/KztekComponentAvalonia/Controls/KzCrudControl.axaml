@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls"
+             x:Class="KztekComponentAvalonia.Controls.KzCrudControl">
+
+  <Grid RowDefinitions="Auto,*,Auto">
+
+    <!-- ── Toolbar ────────────────────────────────────────────────── -->
+    <kz:KzToolBar Grid.Row="0" Name="PART_ToolBar" />
+
+    <!-- ── DataGrid ───────────────────────────────────────────────── -->
+    <DataGrid Grid.Row="1"
+              Name="PART_Grid"
+              Classes="kz-grid"
+              AutoGenerateColumns="False"
+              CanUserReorderColumns="True"
+              CanUserResizeColumns="True"
+              CanUserSortColumns="True"
+              IsReadOnly="True"
+              SelectionMode="Single"
+              HorizontalScrollBarVisibility="Auto"
+              VerticalScrollBarVisibility="Auto" />
+
+    <!-- ── Navigation ─────────────────────────────────────────────── -->
+    <Border Grid.Row="2"
+            Background="{StaticResource kz.brush.navy.100}"
+            BorderBrush="{StaticResource kz.brush.border}"
+            BorderThickness="0,1,0,0"
+            Padding="12,6">
+      <Grid ColumnDefinitions="*,Auto">
+
+        <!-- Row count info -->
+        <TextBlock Grid.Column="0"
+                   Name="PART_TxtCount"
+                   Text="0 bản ghi"
+                   Foreground="{StaticResource kz.brush.text.muted}"
+                   FontSize="12"
+                   VerticalAlignment="Center" />
+
+        <kz:KzNavigation Grid.Column="1"
+                          Name="PART_Nav"
+                          KzSize="Sm" />
+
+      </Grid>
+    </Border>
+
+  </Grid>
+</UserControl>

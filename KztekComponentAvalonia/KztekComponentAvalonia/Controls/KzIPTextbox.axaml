@@ -1,0 +1,106 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="KztekComponentAvalonia.Controls.KzIPTextbox">
+
+  <Border Name="PART_Border"
+          Background="{StaticResource kz.brush.white}"
+          BorderBrush="{StaticResource kz.brush.border}"
+          BorderThickness="1"
+          CornerRadius="{StaticResource kz.radius.md}"
+          MinHeight="{StaticResource kz.height.md}">
+    <Border.Transitions>
+      <Transitions>
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.12" />
+        <ThicknessTransition Property="BorderThickness" Duration="0:0:0.08" />
+      </Transitions>
+    </Border.Transitions>
+
+    <!-- Octets + dots, centered vertically inside the border -->
+    <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="6,0">
+
+      <!-- Octet 0 -->
+      <TextBox Name="PART_Oct0"
+               MaxLength="3"
+               TextAlignment="Center"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="2,0"
+               Width="40"
+               VerticalContentAlignment="Center"
+               FontSize="{StaticResource kz.font.md}"
+               CaretBrush="{StaticResource kz.brush.navy.900}"
+               SelectionBrush="{StaticResource kz.brush.orange.300}"
+               Watermark="___" />
+
+      <TextBlock Name="PART_Dot0"
+                 Text="."
+                 Width="10"
+                 TextAlignment="Center"
+                 VerticalAlignment="Center"
+                 FontSize="{StaticResource kz.font.md}"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+
+      <!-- Octet 1 -->
+      <TextBox Name="PART_Oct1"
+               MaxLength="3"
+               TextAlignment="Center"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="2,0"
+               Width="40"
+               VerticalContentAlignment="Center"
+               FontSize="{StaticResource kz.font.md}"
+               CaretBrush="{StaticResource kz.brush.navy.900}"
+               SelectionBrush="{StaticResource kz.brush.orange.300}"
+               Watermark="___" />
+
+      <TextBlock Name="PART_Dot1"
+                 Text="."
+                 Width="10"
+                 TextAlignment="Center"
+                 VerticalAlignment="Center"
+                 FontSize="{StaticResource kz.font.md}"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+
+      <!-- Octet 2 -->
+      <TextBox Name="PART_Oct2"
+               MaxLength="3"
+               TextAlignment="Center"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="2,0"
+               Width="40"
+               VerticalContentAlignment="Center"
+               FontSize="{StaticResource kz.font.md}"
+               CaretBrush="{StaticResource kz.brush.navy.900}"
+               SelectionBrush="{StaticResource kz.brush.orange.300}"
+               Watermark="___" />
+
+      <TextBlock Name="PART_Dot2"
+                 Text="."
+                 Width="10"
+                 TextAlignment="Center"
+                 VerticalAlignment="Center"
+                 FontSize="{StaticResource kz.font.md}"
+                 Foreground="{StaticResource kz.brush.navy.900}" />
+
+      <!-- Octet 3 -->
+      <TextBox Name="PART_Oct3"
+               MaxLength="3"
+               TextAlignment="Center"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="2,0"
+               Width="40"
+               VerticalContentAlignment="Center"
+               FontSize="{StaticResource kz.font.md}"
+               CaretBrush="{StaticResource kz.brush.navy.900}"
+               SelectionBrush="{StaticResource kz.brush.orange.300}"
+               Watermark="___" />
+
+    </StackPanel>
+  </Border>
+</UserControl>

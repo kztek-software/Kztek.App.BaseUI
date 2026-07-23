@@ -1,0 +1,45 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls">
+
+  <ControlTheme x:Key="{x:Type kz:KzLink}" TargetType="kz:KzLink">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="FontSize" Value="{StaticResource kz.font.md}" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{StaticResource kz.brush.navy.700}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <TextBlock Name="PART_Text"
+                   Text="{TemplateBinding Content}"
+                   Foreground="{TemplateBinding Foreground}"
+                   FontSize="{TemplateBinding FontSize}"
+                   FontWeight="{TemplateBinding FontWeight}"
+                   TextDecorations="{Binding #PART_Text.Tag}" />
+      </ControlTemplate>
+    </Setter>
+
+    <!-- Hover: orange + underline -->
+    <Style Selector="^:pointerover">
+      <Setter Property="Foreground" Value="{StaticResource kz.brush.orange.500}" />
+    </Style>
+    <Style Selector="^:pointerover /template/ TextBlock#PART_Text">
+      <Setter Property="TextDecorations" Value="Underline" />
+    </Style>
+
+    <!-- Pressed -->
+    <Style Selector="^:pressed">
+      <Setter Property="Foreground" Value="{StaticResource kz.brush.orange.hover}" />
+    </Style>
+
+    <!-- Disabled -->
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{StaticResource kz.brush.navy.300}" />
+      <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+  </ControlTheme>
+
+</ResourceDictionary>

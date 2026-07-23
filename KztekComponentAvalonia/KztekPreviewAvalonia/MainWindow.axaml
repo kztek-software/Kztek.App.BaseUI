@@ -1,0 +1,65 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:KztekPreviewAvalonia.ViewModels"
+        xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia"
+        xmlns:pages="clr-namespace:KztekPreviewAvalonia.Pages"
+        x:Class="KztekPreviewAvalonia.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="KZTEK Component Library — Preview"
+        Width="1200" Height="780"
+        MinWidth="900" MinHeight="600"
+        Background="{StaticResource kz.brush.bg}"
+        WindowStartupLocation="CenterScreen">
+
+  <Grid ColumnDefinitions="Auto,*">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────────────── -->
+    <kz:KzSidebar Grid.Column="0"
+                  Name="MainSidebar">
+      <kz:KzSidebar.Header>
+        <StackPanel Spacing="4">
+          <TextBlock Text="KZTEK"
+                     Foreground="{StaticResource kz.brush.orange.500}"
+                     FontSize="22"
+                     FontWeight="Bold"
+                     LetterSpacing="2" />
+          <TextBlock Text="Component Library"
+                     Foreground="{StaticResource kz.brush.navy.300}"
+                     FontSize="11" />
+        </StackPanel>
+      </kz:KzSidebar.Header>
+    </kz:KzSidebar>
+
+    <!-- ── Main content area ─────────────────────────────────────────────── -->
+    <DockPanel Grid.Column="1">
+
+      <!-- Top bar -->
+      <Border DockPanel.Dock="Top"
+              Background="{StaticResource kz.brush.white}"
+              BorderBrush="{StaticResource kz.brush.border}"
+              BorderThickness="0,0,0,1"
+              Padding="24,0">
+        <Grid ColumnDefinitions="*,Auto" MinHeight="56">
+          <TextBlock Text="{Binding PageTitle}"
+                     FontSize="{StaticResource kz.font.xl}"
+                     FontWeight="SemiBold"
+                     Foreground="{StaticResource kz.brush.navy.900}"
+                     VerticalAlignment="Center" />
+          <TextBlock Grid.Column="1"
+                     Text="Avalonia 11 · KZTEK Brand"
+                     FontSize="{StaticResource kz.font.sm}"
+                     Foreground="{StaticResource kz.brush.text.muted}"
+                     VerticalAlignment="Center" />
+        </Grid>
+      </Border>
+
+      <!-- Page host -->
+      <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Auto"
+                    Padding="24">
+        <ContentControl Name="PageHost" />
+      </ScrollViewer>
+
+    </DockPanel>
+  </Grid>
+</Window>

@@ -1,0 +1,322 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls;assembly=KztekComponentAvalonia"
+             x:Class="KztekPreviewAvalonia.Pages.FormControlsPage">
+
+  <ScrollViewer>
+    <StackPanel Spacing="32" MaxWidth="640" HorizontalAlignment="Left" Margin="0,0,0,32">
+
+      <!-- ── KzPasswordTextBox ──────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzPasswordTextBox — Ẩn / Hiện mật khẩu"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <TextBlock Text="Nhấn icon 👁 bên phải để bật/tắt hiển thị mật khẩu."
+                   FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="Default" FontWeight="SemiBold" FontSize="13"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzPasswordTextBox Watermark="Nhập mật khẩu" KzSize="Md" />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="States" FontWeight="SemiBold" FontSize="13"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzPasswordTextBox Watermark="Lớn — 48px" KzSize="Lg" />
+        <kz:KzPasswordTextBox Text="sai_mat_khau" InputState="Error" KzSize="Md" />
+        <TextBlock Text="Mật khẩu không đúng. Vui lòng thử lại."
+                   FontSize="12" Foreground="{StaticResource kz.brush.error}" Margin="4,0,0,0" />
+        <kz:KzPasswordTextBox Text="••••••••" InputState="Disabled" KzSize="Md" />
+      </StackPanel>
+
+      <!-- Login form example -->
+      <Border Background="{StaticResource kz.brush.white}"
+              BorderBrush="{StaticResource kz.brush.border}"
+              BorderThickness="1" CornerRadius="{StaticResource kz.radius.lg}" Padding="20">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Ví dụ form đăng nhập" FontWeight="SemiBold"
+                     FontSize="14" Foreground="{StaticResource kz.brush.navy.900}" />
+          <kz:KzTextBox Watermark="Email: admin@kztek.net" KzSize="Md" />
+          <kz:KzPasswordTextBox Watermark="Mật khẩu" KzSize="Md" />
+          <kz:KzButton Content="Đăng nhập" Variant="Primary" KzSize="Md"
+                       HorizontalAlignment="Stretch" />
+          <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center">
+            <TextBlock Text="Quên mật khẩu?" FontSize="13"
+                       Foreground="{StaticResource kz.brush.text.muted}"
+                       VerticalAlignment="Center" />
+            <kz:KzLink Content="Đặt lại ngay" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzCheckBox ─────────────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzCheckBox — Hộp kiểm"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+      </StackPanel>
+      <WrapPanel>
+        <kz:KzCheckBox Content="Chưa chọn" Margin="0,0,20,8" />
+        <kz:KzCheckBox Content="Đã chọn" IsChecked="True" Margin="0,0,20,8" />
+        <kz:KzCheckBox Content="Disabled" IsEnabled="False" Margin="0,0,20,8" />
+        <kz:KzCheckBox Content="Checked + Disabled" IsChecked="True" IsEnabled="False" Margin="0,0,0,8" />
+      </WrapPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzCheckedListBox ──────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzCheckedListBox — Danh sách checkbox"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <TextBlock Text="Nhấn để chọn/bỏ chọn nhiều mục cùng lúc."
+                   FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+      </StackPanel>
+
+      <WrapPanel>
+        <!-- Default — 2 items pre-selected -->
+        <StackPanel Spacing="6" Margin="0,0,16,0">
+          <TextBlock Text="Default" FontWeight="SemiBold" FontSize="13"
+                     Foreground="{StaticResource kz.brush.navy.900}" />
+          <kz:KzCheckedListBox Width="200" Height="160">
+            <ListBoxItem Content="Hà Nội"           IsSelected="True" />
+            <ListBoxItem Content="TP. Hồ Chí Minh" />
+            <ListBoxItem Content="Đà Nẵng"          IsSelected="True" />
+            <ListBoxItem Content="Hải Phòng" />
+            <ListBoxItem Content="Cần Thơ" />
+            <ListBoxItem Content="Biên Hoà" />
+          </kz:KzCheckedListBox>
+        </StackPanel>
+
+        <!-- All checked -->
+        <StackPanel Spacing="6" Margin="0,0,16,0">
+          <TextBlock Text="All checked" FontWeight="SemiBold" FontSize="13"
+                     Foreground="{StaticResource kz.brush.navy.900}" />
+          <kz:KzCheckedListBox Width="200" Height="160">
+            <ListBoxItem Content="Hà Nội"           IsSelected="True" />
+            <ListBoxItem Content="TP. Hồ Chí Minh" IsSelected="True" />
+            <ListBoxItem Content="Đà Nẵng"          IsSelected="True" />
+            <ListBoxItem Content="Hải Phòng"        IsSelected="True" />
+            <ListBoxItem Content="Cần Thơ"          IsSelected="True" />
+            <ListBoxItem Content="Biên Hoà"         IsSelected="True" />
+          </kz:KzCheckedListBox>
+        </StackPanel>
+
+        <!-- Disabled -->
+        <StackPanel Spacing="6">
+          <TextBlock Text="Disabled" FontWeight="SemiBold" FontSize="13"
+                     Foreground="{StaticResource kz.brush.navy.900}" />
+          <kz:KzCheckedListBox Width="200" Height="160" IsEnabled="False">
+            <ListBoxItem Content="Hà Nội" />
+            <ListBoxItem Content="TP. Hồ Chí Minh" IsSelected="True" />
+            <ListBoxItem Content="Đà Nẵng" />
+            <ListBoxItem Content="Hải Phòng"        IsSelected="True" />
+            <ListBoxItem Content="Cần Thơ" />
+            <ListBoxItem Content="Biên Hoà" />
+          </kz:KzCheckedListBox>
+        </StackPanel>
+      </WrapPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzRadioButton ──────────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzRadioButton — Nút chọn một"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+      </StackPanel>
+      <WrapPanel>
+        <kz:KzRadioButton Content="Ô tô" GroupName="VehicleType" IsChecked="True" Margin="0,0,20,8" />
+        <kz:KzRadioButton Content="Xe máy" GroupName="VehicleType" Margin="0,0,20,8" />
+        <kz:KzRadioButton Content="Xe tải" GroupName="VehicleType" Margin="0,0,20,8" />
+        <kz:KzRadioButton Content="Disabled" GroupName="VehicleType" IsEnabled="False" />
+      </WrapPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzToggleSwitch ─────────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzToggleSwitch — Công tắc bật/tắt"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+      </StackPanel>
+      <WrapPanel>
+        <StackPanel Spacing="4" Margin="0,0,24,0">
+          <TextBlock Text="Off" FontSize="12" Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzToggleSwitch />
+        </StackPanel>
+        <StackPanel Spacing="4" Margin="0,0,24,0">
+          <TextBlock Text="On" FontSize="12" Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzToggleSwitch IsChecked="True" />
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Text="Disabled" FontSize="12" Foreground="{StaticResource kz.brush.text.muted}" />
+          <kz:KzToggleSwitch IsEnabled="False" />
+        </StackPanel>
+      </WrapPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzLabel ────────────────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzLabel — Typography"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+      </StackPanel>
+      <StackPanel Spacing="8">
+        <kz:KzLabel Text="Heading 1 — KZTEK Platform" LabelType="H1" />
+        <kz:KzLabel Text="Heading 2 — Quản lý bãi đỗ xe" LabelType="H2" />
+        <kz:KzLabel Text="Heading 3 — Danh sách phương tiện" LabelType="H3" />
+        <kz:KzLabel Text="Subheading — Thông tin tổng quan" LabelType="Subheading" />
+        <kz:KzLabel Text="Body — Xe đã vào lúc 08:32, biển số 51K-289.44, loại ô tô." LabelType="Body" />
+        <kz:KzLabel Text="Small — Cập nhật lúc 08:35" LabelType="Small" />
+        <kz:KzLabel Text="Caption — Phiên bản 2.1.0" LabelType="Caption" />
+        <kz:KzLabel Text="Muted — Không có dữ liệu để hiển thị." LabelType="Muted" />
+      </StackPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzProgressBar ──────────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzProgressBar — Thanh tiến trình"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+      </StackPanel>
+      <StackPanel Spacing="8">
+        <TextBlock Text="Primary (Navy)" FontSize="12" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzProgressBar Value="25"  MinHeight="8" />
+        <kz:KzProgressBar Value="50"  MinHeight="8" />
+        <kz:KzProgressBar Value="75"  MinHeight="8" />
+        <kz:KzProgressBar Value="100" MinHeight="8" />
+        <TextBlock Text="Accent (Orange)" FontSize="12" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" Margin="0,8,0,0" />
+        <kz:KzProgressBar Value="65" Variant="Accent" MinHeight="8" />
+        <TextBlock Text="Success (Green)" FontSize="12" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzProgressBar Value="80" Variant="Success" MinHeight="8" />
+      </StackPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzGroupBox ─────────────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzGroupBox — Nhóm nội dung"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+      </StackPanel>
+      <WrapPanel>
+        <kz:KzGroupBox Title="Default" Width="200" Height="100" Margin="0,0,16,0">
+          <kz:KzGroupBox.GroupContent>
+            <TextBlock Text="Nội dung bên trong" FontSize="13"
+                       Foreground="{StaticResource kz.brush.text.muted}"
+                       TextWrapping="Wrap" />
+          </kz:KzGroupBox.GroupContent>
+        </kz:KzGroupBox>
+
+        <kz:KzGroupBox Title="Filled" Variant="Filled" Width="200" Height="100" Margin="0,0,16,0">
+          <kz:KzGroupBox.GroupContent>
+            <TextBlock Text="Nền xám nhạt navy-100" FontSize="13"
+                       Foreground="{StaticResource kz.brush.text.muted}"
+                       TextWrapping="Wrap" />
+          </kz:KzGroupBox.GroupContent>
+        </kz:KzGroupBox>
+
+        <kz:KzGroupBox Title="Outlined" Variant="Outlined" Width="200" Height="100">
+          <kz:KzGroupBox.GroupContent>
+            <TextBlock Text="Viền 2px, nền trong suốt" FontSize="13"
+                       Foreground="{StaticResource kz.brush.text.muted}"
+                       TextWrapping="Wrap" />
+          </kz:KzGroupBox.GroupContent>
+        </kz:KzGroupBox>
+      </WrapPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzPanel ────────────────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzPanel — Panel bo tròn có shadow"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+      </StackPanel>
+      <kz:KzPanel IsHoverable="True" Width="320">
+        <kz:KzPanel.PanelContent>
+          <StackPanel Spacing="4">
+            <TextBlock Text="KzPanel — Hover để xem hiệu ứng"
+                       FontSize="14" FontWeight="SemiBold"
+                       Foreground="{StaticResource kz.brush.navy.900}" />
+            <TextBlock Text="Shadow nổi lên, viền cam khi rê chuột vào."
+                       FontSize="13" Foreground="{StaticResource kz.brush.text.muted}"
+                       TextWrapping="Wrap" />
+          </StackPanel>
+        </kz:KzPanel.PanelContent>
+      </kz:KzPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzTabControl ───────────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzTabControl — Tab điều hướng"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+      </StackPanel>
+      <kz:KzTabControl Width="520" HorizontalAlignment="Left">
+        <TabItem Header="Thông tin xe">
+          <Border Padding="16">
+            <TextBlock Text="Biển số, loại xe, màu sắc, năm sản xuất..."
+                       Foreground="{StaticResource kz.brush.text.muted}" />
+          </Border>
+        </TabItem>
+        <TabItem Header="Lịch sử vào/ra">
+          <Border Padding="16">
+            <TextBlock Text="Thời gian vào, ra của phương tiện trong ngày."
+                       Foreground="{StaticResource kz.brush.text.muted}" />
+          </Border>
+        </TabItem>
+        <TabItem Header="Cảnh báo">
+          <Border Padding="16">
+            <TextBlock Text="Không có cảnh báo nào." FontStyle="Italic"
+                       Foreground="{StaticResource kz.brush.text.muted}" />
+          </Border>
+        </TabItem>
+      </kz:KzTabControl>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzDateTimePicker ───────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzDateTimePicker — Chọn ngày"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+      </StackPanel>
+      <StackPanel Spacing="8">
+        <TextBlock Text="Default" FontWeight="SemiBold" FontSize="13"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <kz:KzDateTimePicker Width="240" HorizontalAlignment="Left" />
+        <TextBlock Text="Disabled" FontWeight="SemiBold" FontSize="13"
+                   Foreground="{StaticResource kz.brush.navy.900}" Margin="0,8,0,0" />
+        <kz:KzDateTimePicker Width="240" HorizontalAlignment="Left" IsEnabled="False" />
+      </StackPanel>
+
+      <Border Height="1" Background="{StaticResource kz.brush.divider}" />
+
+      <!-- ── KzKeyboard ─────────────────────────────────────────────────── -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="KzKeyboard — Bàn phím ảo"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{StaticResource kz.brush.navy.900}" />
+        <TextBlock Text="Alpha / Numeric / Special mode. Portrait / Landscape."
+                   FontSize="13" Foreground="{StaticResource kz.brush.text.muted}" />
+      </StackPanel>
+      <StackPanel Spacing="8" Name="KeyboardStack">
+        <kz:KzTextBox Name="KbTarget" Watermark="KzKeyboard sẽ gõ vào đây..." KzSize="Md" Width="390" HorizontalAlignment="Left" />
+        <kz:KzKeyboard Name="MainKeyboard" />
+      </StackPanel>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

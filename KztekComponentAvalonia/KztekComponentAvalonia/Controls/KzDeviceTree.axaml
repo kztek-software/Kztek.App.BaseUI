@@ -1,0 +1,208 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls"
+             x:Class="KztekComponentAvalonia.Controls.KzDeviceTree">
+
+  <UserControl.Resources>
+    <!-- TreeViewItem theme — Navy/Orange KZTEK style -->
+    <ControlTheme x:Key="KzTreeItem" TargetType="TreeViewItem" x:DataType="kz:KzDeviceNode">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+      <Setter Property="Foreground" Value="{StaticResource kz.brush.text}" />
+      <Setter Property="Padding" Value="4,0" />
+      <Setter Property="MinHeight" Value="32" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <StackPanel>
+            <!-- Row highlight -->
+            <Border Name="PART_RowBorder"
+                    Background="Transparent"
+                    CornerRadius="6"
+                    Margin="2,1">
+              <Grid ColumnDefinitions="Auto,*">
+                <!-- Expand/collapse toggle -->
+                <ToggleButton Grid.Column="0"
+                              Name="PART_ExpandCollapseChevron"
+                              Width="20" Height="20"
+                              Margin="0,0,2,0"
+                              IsChecked="{Binding $parent[TreeViewItem].IsExpanded, Mode=TwoWay}"
+                              IsVisible="{Binding HasChildren}"
+                              VerticalAlignment="Center">
+                  <ToggleButton.Styles>
+                    <Style Selector="ToggleButton">
+                      <Setter Property="Background" Value="Transparent" />
+                      <Setter Property="BorderThickness" Value="0" />
+                      <Setter Property="Template">
+                        <ControlTemplate>
+                          <Border Background="Transparent" Width="20" Height="20">
+                            <Path Name="Arrow"
+                                  Data="M 0 0 L 7 5 L 0 10"
+                                  Stroke="{StaticResource kz.brush.navy.700}"
+                                  StrokeThickness="1.5"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  RenderTransformOrigin="50%,50%">
+                              <Path.RenderTransform>
+                                <RotateTransform Angle="0" />
+                              </Path.RenderTransform>
+                            </Path>
+                          </Border>
+                        </ControlTemplate>
+                      </Setter>
+                    </Style>
+                    <Style Selector="ToggleButton:checked /template/ Path#Arrow">
+                      <Setter Property="RenderTransform">
+                        <RotateTransform Angle="90" />
+                      </Setter>
+                    </Style>
+                  </ToggleButton.Styles>
+                </ToggleButton>
+                <!-- No expander placeholder -->
+                <Border Grid.Column="0" Width="20"
+                        IsVisible="{Binding !HasChildren}" />
+
+                <!-- Item content -->
+                <ContentPresenter Grid.Column="1"
+                                  Name="PART_HeaderPresenter"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                  Padding="{TemplateBinding Padding}"
+                                  VerticalContentAlignment="Center" />
+              </Grid>
+            </Border>
+
+            <!-- Children -->
+            <ItemsPresenter Name="PART_ItemsPresenter"
+                            IsVisible="{TemplateBinding IsExpanded}"
+                            Margin="16,0,0,0" />
+          </StackPanel>
+        </ControlTemplate>
+      </Setter>
+
+      <!-- Hover -->
+      <Style Selector="^:pointerover /template/ Border#PART_RowBorder">
+        <Setter Property="Background" Value="{StaticResource kz.brush.navy.100}" />
+      </Style>
+
+      <!-- Selected -->
+      <Style Selector="^:selected /template/ Border#PART_RowBorder">
+        <Setter Property="Background" Value="{StaticResource kz.brush.navy.100}" />
+      </Style>
+      <Style Selector="^:selected /template/ ContentPresenter#PART_HeaderPresenter">
+        <Setter Property="TextElement.Foreground" Value="{StaticResource kz.brush.navy.900}" />
+        <Setter Property="TextElement.FontWeight" Value="SemiBold" />
+      </Style>
+    </ControlTheme>
+  </UserControl.Resources>
+
+  <Border Background="{StaticResource kz.brush.white}"
+          BorderBrush="{StaticResource kz.brush.border}"
+          BorderThickness="1"
+          CornerRadius="{StaticResource kz.radius.lg}">
+
+    <DockPanel>
+
+      <!-- Optional header -->
+      <Border Name="HeaderArea"
+              DockPanel.Dock="Top"
+              Background="{StaticResource kz.brush.navy.900}"
+              Height="44"
+              CornerRadius="11,11,0,0"
+              Padding="16,0"
+              IsVisible="False">
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBlock Name="HeaderLabel"
+                     Text="Thiết bị"
+                     FontSize="{StaticResource kz.font.md}"
+                     FontWeight="SemiBold"
+                     Foreground="{StaticResource kz.brush.white}"
+                     VerticalAlignment="Center" />
+          <TextBlock Grid.Column="1"
+                     Name="OnlineCount"
+                     FontSize="{StaticResource kz.font.sm}"
+                     Foreground="{StaticResource kz.brush.navy.300}"
+                     VerticalAlignment="Center" />
+        </Grid>
+      </Border>
+
+      <!-- TreeView -->
+      <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Auto">
+        <TreeView Name="PART_Tree"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Padding="6">
+
+          <TreeView.ItemContainerTheme>
+            <StaticResource ResourceKey="KzTreeItem" />
+          </TreeView.ItemContainerTheme>
+
+          <TreeView.ItemTemplate>
+            <TreeDataTemplate DataType="kz:KzDeviceNode"
+                              ItemsSource="{Binding Children}">
+              <StackPanel Orientation="Horizontal" Spacing="6" Height="30">
+
+                <!-- Status icon (leaf nodes only) -->
+                <TextBlock FontSize="11"
+                           VerticalAlignment="Center"
+                           Text="{Binding StatusIcon}"
+                           IsVisible="{Binding IsLeaf}">
+                  <TextBlock.Foreground>
+                    <SolidColorBrush Color="{Binding StatusColor}" />
+                  </TextBlock.Foreground>
+                </TextBlock>
+
+                <!-- Device icon -->
+                <TextBlock Text="{Binding DeviceIcon}"
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Foreground="{Binding DeviceIconBrush}" />
+
+                <!-- Device name (color for cameras reflects slot availability) -->
+                <TextBlock Text="{Binding Name}"
+                           FontSize="{StaticResource kz.font.md}"
+                           VerticalAlignment="Center"
+                           Foreground="{Binding NameBrush}" />
+
+                <!-- Slot count badge — visible on camera nodes only -->
+                <Border CornerRadius="4" Padding="5,1"
+                        VerticalAlignment="Center"
+                        Background="{Binding SlotBrush}"
+                        IsVisible="{Binding HasSlots}">
+                  <TextBlock Text="{Binding SlotText}"
+                             FontSize="10" FontWeight="SemiBold"
+                             Foreground="White" />
+                </Border>
+
+                <!-- IP hint for leaf nodes -->
+                <TextBlock Text="{Binding IpAddress}"
+                           FontSize="{StaticResource kz.font.sm}"
+                           Foreground="{StaticResource kz.brush.text.muted}"
+                           VerticalAlignment="Center"
+                           IsVisible="{Binding IsLeaf}" />
+
+                <!-- Status badge (leaf nodes only) -->
+                <Border CornerRadius="4" Padding="5,1"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding IsLeaf}">
+                  <Border.Background>
+                    <SolidColorBrush Color="{Binding StatusBadgeBackground}" />
+                  </Border.Background>
+                  <TextBlock Text="{Binding StatusLabel}"
+                             FontSize="10" FontWeight="SemiBold">
+                    <TextBlock.Foreground>
+                      <SolidColorBrush Color="{Binding StatusColor}" />
+                    </TextBlock.Foreground>
+                  </TextBlock>
+                </Border>
+
+              </StackPanel>
+            </TreeDataTemplate>
+          </TreeView.ItemTemplate>
+
+        </TreeView>
+      </ScrollViewer>
+
+    </DockPanel>
+  </Border>
+</UserControl>

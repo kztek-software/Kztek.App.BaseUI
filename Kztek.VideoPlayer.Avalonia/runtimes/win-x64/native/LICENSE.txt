@@ -1,0 +1,22 @@
+LICENSE NOTICE — FFmpeg binaries
+=================================
+
+The FFmpeg DLL files in this directory (avcodec-61.dll, avformat-61.dll,
+avutil-59.dll, avfilter-10.dll, avdevice-61.dll, swscale-8.dll,
+swresample-5.dll, postproc-58.dll) are built by gyan.dev as "full_build"
+(https://www.gyan.dev/ffmpeg/builds/) and are licensed under the
+GNU General Public License version 3 (GPLv3).
+
+SOURCE: https://www.gyan.dev/ffmpeg/builds/
+
+INTERNAL RISK DECISION (2026-07-22):
+User (KZTEK) has acknowledged and accepted the GPLv3 license risk for
+internal use in the kiosk product. This decision is recorded in
+.claude/GOTCHAS.md entry G019. Tech Lead originally recommended switching
+to an LGPL build (BtbN), but user confirmed using the existing GPL build.
+
+The GPLv3 license text is available at:
+https://www.gnu.org/licenses/gpl-3.0.txt
+
+For questions about FFmpeg licensing, see:
+https://ffmpeg.org/legal.html

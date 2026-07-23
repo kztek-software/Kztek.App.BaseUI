@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- net8.0 thuần — khớp với IPGS.Kiosk.Avalonia.csproj pattern.
+         Windows-only do P/Invoke FFmpeg DLL; Linux chưa đóng gói .so (out-of-scope). -->
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- NOTE (License decision 2026-07-22, G019): DLL FFmpeg trong runtimes/win-x64/native/ là
+         GPLv3 build (gyan.dev full_build) — copy từ Kztek.Cameras.Avalonia. Quyết định này
+         được user xác nhận chấp nhận rủi ro pháp lý sau khi được giải thích 2 lần. -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Avalonia core — cùng version 12.1.0 với IPGS.Kiosk.Avalonia -->
+    <PackageReference Include="Avalonia" Version="12.1.0" />
+  </ItemGroup>
+
+  <!-- Native FFmpeg DLL — copy sang output khi build host project reference library này -->
+  <ItemGroup>
+    <None Update="runtimes\win-x64\native\*.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="runtimes\win-x64\native\*.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="runtimes\win-x64\native\LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
