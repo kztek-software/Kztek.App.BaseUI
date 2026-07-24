@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
@@ -30,6 +29,12 @@ public partial class KzCrudControl : UserControl
 
     public static readonly StyledProperty<object?> SelectedItemProperty =
         AvaloniaProperty.Register<KzCrudControl, object?>(nameof(SelectedItem));
+
+    public static readonly StyledProperty<bool> ShowImportProperty =
+        AvaloniaProperty.Register<KzCrudControl, bool>(nameof(ShowImport), false);
+
+    public static readonly StyledProperty<bool> ShowExportProperty =
+        AvaloniaProperty.Register<KzCrudControl, bool>(nameof(ShowExport), false);
 
     public IEnumerable? ItemsSource
     {
@@ -61,13 +66,17 @@ public partial class KzCrudControl : UserControl
         set => SetValue(SelectedItemProperty, value);
     }
 
-    // ── AXAML column definitions ──────────────────────────────────────────────
+    public bool ShowImport
+    {
+        get => GetValue(ShowImportProperty);
+        set => SetValue(ShowImportProperty, value);
+    }
 
-    /// <summary>
-    /// Define DataGrid columns in AXAML using &lt;kz:KzCrudControl.ColumnDefs&gt;.
-    /// Columns are transferred to the inner DataGrid during OnAttachedToVisualTree.
-    /// </summary>
-    public List<DataGridColumn> ColumnDefs { get; } = new();
+    public bool ShowExport
+    {
+        get => GetValue(ShowExportProperty);
+        set => SetValue(ShowExportProperty, value);
+    }
 
     // ── Inner control exposure ────────────────────────────────────────────────
 
@@ -76,6 +85,24 @@ public partial class KzCrudControl : UserControl
 
     /// <summary>Direct access to the inner DataGrid for column/style customization.</summary>
     public DataGrid? InnerGrid => _grid;
+
+    /// <summary>
+    /// Set columns on the inner DataGrid. Safe to call before the control is attached to
+    /// the visual tree (e.g. for non-selected Avalonia TabItems): columns are stored and
+    /// applied automatically in <see cref="SyncAll"/> when the tab is first shown.
+    /// </summary>
+    public void SetColumns(System.Collections.Generic.IEnumerable<DataGridColumn> columns)
+    {
+        if (_grid is not null)
+        {
+            _grid.Columns.Clear();
+            foreach (var col in columns) _grid.Columns.Add(col);
+        }
+        else
+        {
+            _pendingColumns = new System.Collections.Generic.List<DataGridColumn>(columns);
+        }
+    }
 
     // ── Events (forwarded from KzToolBar) ─────────────────────────────────────
 
@@ -90,13 +117,14 @@ public partial class KzCrudControl : UserControl
 
     // ── Privates ───────────────────────────────────────────────────────────────
 
-    private KzToolBar?   _toolBar;
-    private DataGrid?    _grid;
-    private KzNavigation?_nav;
-    private TextBlock?   _txtCount;
-    private bool         _isUpdatingSelection;
+    private KzToolBar? _toolBar;
+    private DataGrid? _grid;
+    private KzNavigation? _nav;
+    private TextBlock? _txtCount;
+    private bool _isUpdatingSelection;
+    private System.Collections.Generic.List<DataGridColumn>? _pendingColumns;
 
-    private INotifyCollectionChanged?         _subscribedCollection;
+    private INotifyCollectionChanged? _subscribedCollection;
     private NotifyCollectionChangedEventHandler? _onCollectionChanged;
 
     private EventHandler? _onToolBarAdd;
@@ -114,24 +142,24 @@ public partial class KzCrudControl : UserControl
     {
         base.OnAttachedToVisualTree(e);
 
-        _toolBar  = this.FindControl<KzToolBar>   ("PART_ToolBar")!;
-        _grid     = this.FindControl<DataGrid>    ("PART_Grid")!;
-        _nav      = this.FindControl<KzNavigation>("PART_Nav")!;
-        _txtCount = this.FindControl<TextBlock>   ("PART_TxtCount")!;
+        _toolBar = this.FindControl<KzToolBar>("PART_ToolBar")!;
+        _grid = this.FindControl<DataGrid>("PART_Grid")!;
+        _nav = this.FindControl<KzNavigation>("PART_Nav")!;
+        _txtCount = this.FindControl<TextBlock>("PART_TxtCount")!;
 
-        _onToolBarAdd     = (s, e2) => AddClicked?.Invoke(s, e2);
-        _onToolBarEdit    = (s, e2) => EditClicked?.Invoke(s, e2);
-        _onToolBarDelete  = (s, e2) => DeleteClicked?.Invoke(s, e2);
+        _onToolBarAdd = (s, e2) => AddClicked?.Invoke(s, e2);
+        _onToolBarEdit = (s, e2) => EditClicked?.Invoke(s, e2);
+        _onToolBarDelete = (s, e2) => DeleteClicked?.Invoke(s, e2);
         _onToolBarRefresh = (s, e2) => RefreshClicked?.Invoke(s, e2);
-        _onToolBarImport  = (s, e2) => ImportClicked?.Invoke(s, e2);
-        _onToolBarExport  = (s, e2) => ExportClicked?.Invoke(s, e2);
+        _onToolBarImport = (s, e2) => ImportClicked?.Invoke(s, e2);
+        _onToolBarExport = (s, e2) => ExportClicked?.Invoke(s, e2);
 
-        _toolBar.AddClicked     += _onToolBarAdd;
-        _toolBar.EditClicked    += _onToolBarEdit;
-        _toolBar.DeleteClicked  += _onToolBarDelete;
+        _toolBar.AddClicked += _onToolBarAdd;
+        _toolBar.EditClicked += _onToolBarEdit;
+        _toolBar.DeleteClicked += _onToolBarDelete;
         _toolBar.RefreshClicked += _onToolBarRefresh;
-        _toolBar.ImportClicked  += _onToolBarImport;
-        _toolBar.ExportClicked  += _onToolBarExport;
+        _toolBar.ImportClicked += _onToolBarImport;
+        _toolBar.ExportClicked += _onToolBarExport;
 
         _onNavPageChanged = (_, args) =>
         {
@@ -144,16 +172,11 @@ public partial class KzCrudControl : UserControl
         {
             if (_isUpdatingSelection) return;
             _isUpdatingSelection = true;
-            try   { SelectedItem = _grid.SelectedItem; }
+            try { SelectedItem = _grid.SelectedItem; }
             finally { _isUpdatingSelection = false; }
             SelectionChanged?.Invoke(s, args);
         };
         _grid.SelectionChanged += _onGridSelectionChanged;
-
-        // Copy AXAML-defined columns into the DataGrid before SyncAll so they
-        // are part of the first layout pass and render correctly.
-        foreach (var col in ColumnDefs)
-            _grid.Columns.Add(col);
 
         SyncAll();
     }
@@ -168,14 +191,14 @@ public partial class KzCrudControl : UserControl
         }
         if (_toolBar is not null)
         {
-            _toolBar.AddClicked     -= _onToolBarAdd;
-            _toolBar.EditClicked    -= _onToolBarEdit;
-            _toolBar.DeleteClicked  -= _onToolBarDelete;
+            _toolBar.AddClicked -= _onToolBarAdd;
+            _toolBar.EditClicked -= _onToolBarEdit;
+            _toolBar.DeleteClicked -= _onToolBarDelete;
             _toolBar.RefreshClicked -= _onToolBarRefresh;
-            _toolBar.ImportClicked  -= _onToolBarImport;
-            _toolBar.ExportClicked  -= _onToolBarExport;
+            _toolBar.ImportClicked -= _onToolBarImport;
+            _toolBar.ExportClicked -= _onToolBarExport;
         }
-        if (_nav  is not null) _nav.PageChanged       -= _onNavPageChanged;
+        if (_nav is not null) _nav.PageChanged -= _onNavPageChanged;
         if (_grid is not null) _grid.SelectionChanged -= _onGridSelectionChanged;
     }
 
@@ -203,7 +226,7 @@ public partial class KzCrudControl : UserControl
         else if ((change.Property == CurrentPageProperty || change.Property == TotalPagesProperty) && _nav is not null)
         {
             _nav.CurrentPage = CurrentPage;
-            _nav.TotalPages  = TotalPages;
+            _nav.TotalPages = TotalPages;
         }
 
         else if (change.Property == TotalRowsProperty && _txtCount is not null)
@@ -211,16 +234,33 @@ public partial class KzCrudControl : UserControl
 
         else if (change.Property == SelectedItemProperty && _grid is not null && !_isUpdatingSelection)
             _grid.SelectedItem = SelectedItem;
+
+        else if ((change.Property == ShowImportProperty || change.Property == ShowExportProperty) && _toolBar is not null)
+        {
+            _toolBar.ShowImport = ShowImport;
+            _toolBar.ShowExport = ShowExport;
+        }
     }
 
     private void SyncAll()
     {
         if (_grid is null) return;
-        _grid.ItemsSource  = ItemsSource;
-        _nav!.CurrentPage  = CurrentPage;
-        _nav.TotalPages    = TotalPages;
+        if (_pendingColumns is not null)
+        {
+            _grid.Columns.Clear();
+            foreach (var col in _pendingColumns) _grid.Columns.Add(col);
+            _pendingColumns = null;
+        }
+        _grid.ItemsSource = ItemsSource;
+        _nav!.CurrentPage = CurrentPage;
+        _nav.TotalPages = TotalPages;
         TotalRows = GetCount(ItemsSource);
         UpdateCount();
+        if (_toolBar is not null)
+        {
+            _toolBar.ShowImport = ShowImport;
+            _toolBar.ShowExport = ShowExport;
+        }
     }
 
     private void UpdateCount()

@@ -101,8 +101,6 @@ public class KzKeyboard : Control
     private bool           _shifted        = false;
     private bool           _capsLock       = false;
     private bool           _telexEnabled   = false;
-    private string         _telexRaw       = "";
-    private int            _telexDisplayLen = 0;
     private string?        _pressedVal;
 
     private readonly List<(Rect R, KD Key)> _layout = new();
@@ -326,148 +324,28 @@ public class KzKeyboard : Control
 
     // ── Telex input logic ─────────────────────────────────────────────────────
 
+    private string GetTextBeforeCursor()
+    {
+        var tb = TargetTextBox;
+        if (tb == null) return "";
+        return (tb.Text ?? "").Substring(0, System.Math.Max(0, tb.CaretIndex));
+    }
+
     private void TypeTelex(string val)
     {
-        bool upper = _shifted || _capsLock;
-        _telexRaw += char.ToLowerInvariant(val[0]);
-
-        string newDisplay = TransformTelex(_telexRaw);
-        if (upper && newDisplay.Length > 0)
-            newDisplay = char.ToUpperInvariant(newDisplay[0]) + newDisplay.Substring(1);
-
-        DeleteCharsBeforeCursor(_telexDisplayLen);
-        InsertAtCursor(newDisplay);
-        _telexDisplayLen = newDisplay.Length;
+        if (TargetTextBox == null) return;
+        string before = GetTextBeforeCursor();
+        var (del, ins) = KzTelexEngine.Process(before, val[0]);
+        for (int i = 0; i < del; i++) DoBackspaceRaw();
+        TypeTextRaw(ins);
 
         if (_shifted && !_capsLock) { _shifted = false; InvalidateVisual(); }
     }
 
     private void TelexResetSyllable()
     {
-        _telexRaw        = "";
-        _telexDisplayLen = 0;
+        // No longer needed for stateless KzTelexEngine
     }
-
-    // ── Telex transformation engine ───────────────────────────────────────────
-
-    private static string TransformTelex(string raw)
-    {
-        if (string.IsNullOrEmpty(raw)) return raw;
-
-        string s = raw.ToLowerInvariant();
-
-        // dd → đ
-        s = s.Replace("dd", "đ");
-
-        // Extract tone from end
-        int tone = 0;
-        if (s.Length >= 2)
-        {
-            char last   = s[s.Length - 1];
-            string prefix = s.Substring(0, s.Length - 1);
-            if (HasVowel(prefix) && TryParseTone(last, out int t))
-            {
-                if (last == 'r')
-                {
-                    char prev = prefix[prefix.Length - 1];
-                    if (!IsBaseVowel(prev)) goto skipTone;
-                }
-                tone = t;
-                s = prefix;
-            }
-        }
-        skipTone:
-
-        // Vowel base transforms
-        s = s.Replace("uw", "ư").Replace("ow", "ơ")
-             .Replace("aa", "â").Replace("aw", "ă")
-             .Replace("ee", "ê").Replace("oo", "ô");
-
-        if (tone > 0)
-            s = ApplyToneToString(s, tone);
-
-        return s;
-    }
-
-    private static bool TryParseTone(char c, out int tone)
-    {
-        switch (c)
-        {
-            case 's': tone = 1; return true;
-            case 'f': tone = 2; return true;
-            case 'r': tone = 3; return true;
-            case 'x': tone = 4; return true;
-            case 'j': tone = 5; return true;
-            default:  tone = 0; return false;
-        }
-    }
-
-    private static bool HasVowel(string s)
-    {
-        foreach (char c in s)
-            if (IsBaseVowel(c) || IsVowelWithMark(c)) return true;
-        return false;
-    }
-
-    private static bool IsBaseVowel(char c) =>
-        "aeiouăâêôơư".IndexOf(c) >= 0;
-
-    private static bool IsVowelWithMark(char c) =>
-        "áàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ".IndexOf(c) >= 0;
-
-    private static string ApplyToneToString(string s, int tone)
-    {
-        int pos = FindTonicPosition(s);
-        if (pos < 0) return s;
-
-        char v = s[pos];
-        if (!ToneTable.TryGetValue((v, tone), out string? toned)) return s;
-
-        return s.Substring(0, pos) + toned + s.Substring(pos + 1);
-    }
-
-    private static int FindTonicPosition(string s)
-    {
-        const string vowels = "aeiouăâêôơư";
-        var vp = new List<int>();
-        for (int i = 0; i < s.Length; i++)
-            if (vowels.IndexOf(s[i]) >= 0) vp.Add(i);
-
-        if (vp.Count == 0) return -1;
-        if (vp.Count == 1) return vp[0];
-
-        int last = vp[vp.Count - 1];
-        int prev = vp[vp.Count - 2];
-
-        bool lastBeforeConsonant = last < s.Length - 1 && vowels.IndexOf(s[last + 1]) < 0;
-        if (lastBeforeConsonant) return last;
-
-        if (last == prev + 1)
-        {
-            char v1 = s[prev], v2 = s[last];
-            if (v1 == 'o' && (v2 == 'a' || v2 == 'e' || v2 == 'ă')) return last;
-            if (v1 == 'u' && v2 == 'y') return last;
-            if (v2 == 'a') return last;
-            return prev;
-        }
-        return last;
-    }
-
-    private static readonly Dictionary<(char, int), string> ToneTable = new()
-    {
-        {('a',1),"á"},{('a',2),"à"},{('a',3),"ả"},{('a',4),"ã"},{('a',5),"ạ"},
-        {('ă',1),"ắ"},{('ă',2),"ằ"},{('ă',3),"ẳ"},{('ă',4),"ẵ"},{('ă',5),"ặ"},
-        {('â',1),"ấ"},{('â',2),"ầ"},{('â',3),"ẩ"},{('â',4),"ẫ"},{('â',5),"ậ"},
-        {('e',1),"é"},{('e',2),"è"},{('e',3),"ẻ"},{('e',4),"ẽ"},{('e',5),"ẹ"},
-        {('ê',1),"ế"},{('ê',2),"ề"},{('ê',3),"ể"},{('ê',4),"ễ"},{('ê',5),"ệ"},
-        {('i',1),"í"},{('i',2),"ì"},{('i',3),"ỉ"},{('i',4),"ĩ"},{('i',5),"ị"},
-        {('o',1),"ó"},{('o',2),"ò"},{('o',3),"ỏ"},{('o',4),"õ"},{('o',5),"ọ"},
-        {('ô',1),"ố"},{('ô',2),"ồ"},{('ô',3),"ổ"},{('ô',4),"ỗ"},{('ô',5),"ộ"},
-        {('ơ',1),"ớ"},{('ơ',2),"ờ"},{('ơ',3),"ở"},{('ơ',4),"ỡ"},{('ơ',5),"ợ"},
-        {('u',1),"ú"},{('u',2),"ù"},{('u',3),"ủ"},{('u',4),"ũ"},{('u',5),"ụ"},
-        {('ư',1),"ứ"},{('ư',2),"ừ"},{('ư',3),"ử"},{('ư',4),"ữ"},{('ư',5),"ự"},
-        {('y',1),"ý"},{('y',2),"ỳ"},{('y',3),"ỷ"},{('y',4),"ỹ"},{('y',5),"ỵ"},
-    };
 
     // ── Text target helpers ───────────────────────────────────────────────────
 
@@ -496,17 +374,11 @@ public class KzKeyboard : Control
 
     private void DoBackspace()
     {
-        if (_telexEnabled && _telexRaw.Length > 0)
-        {
-            _telexRaw = _telexRaw.Substring(0, _telexRaw.Length - 1);
-            string newDisplay = TransformTelex(_telexRaw);
-            DeleteCharsBeforeCursor(_telexDisplayLen);
-            if (newDisplay.Length > 0) InsertAtCursor(newDisplay);
-            _telexDisplayLen = newDisplay.Length;
-            return;
-        }
+        DoBackspaceRaw();
+    }
 
-        TelexResetSyllable();
+    private void DoBackspaceRaw()
+    {
         var tb = TargetTextBox;
         if (tb is null) return;
         int pos = tb.CaretIndex;
