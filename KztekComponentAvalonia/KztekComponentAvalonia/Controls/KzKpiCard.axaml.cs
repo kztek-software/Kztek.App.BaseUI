@@ -18,6 +18,11 @@ public partial class KzKpiCard : UserControl
     public static readonly StyledProperty<string?> SubtitleProperty =
         AvaloniaProperty.Register<KzKpiCard, string?>(nameof(Subtitle), "so với kỳ trước");
 
+    /// <summary>Hiện hàng delta ("+x% so với kỳ trước"). Tắt cho KPI trạng thái tức thời
+    /// (VD: thiết bị online) — không có "kỳ trước" để so sánh. Mặc định true (giữ hành vi cũ).</summary>
+    public static readonly StyledProperty<bool> ShowDeltaProperty =
+        AvaloniaProperty.Register<KzKpiCard, bool>(nameof(ShowDelta), true);
+
     public string? Label
     {
         get => GetValue(LabelProperty);
@@ -42,6 +47,12 @@ public partial class KzKpiCard : UserControl
         set { SetValue(SubtitleProperty, value); ApplySubtitle(value); }
     }
 
+    public bool ShowDelta
+    {
+        get => GetValue(ShowDeltaProperty);
+        set { SetValue(ShowDeltaProperty, value); ApplyShowDelta(value); }
+    }
+
     public KzKpiCard()
     {
         InitializeComponent();
@@ -54,6 +65,7 @@ public partial class KzKpiCard : UserControl
         ApplyValue(Value);
         ApplyDelta(Delta);
         ApplySubtitle(Subtitle);
+        ApplyShowDelta(ShowDelta);
     }
 
     private void ApplyLabel(string? text)
@@ -86,5 +98,11 @@ public partial class KzKpiCard : UserControl
     {
         if (this.FindControl<TextBlock>("KpiSubtitle") is { } tb)
             tb.Text = text ?? string.Empty;
+    }
+
+    private void ApplyShowDelta(bool show)
+    {
+        if (this.FindControl<StackPanel>("DeltaRow") is { } row)
+            row.IsVisible = show;
     }
 }
