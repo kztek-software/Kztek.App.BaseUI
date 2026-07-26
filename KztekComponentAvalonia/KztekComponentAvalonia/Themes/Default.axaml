@@ -17,6 +17,11 @@
     <ResourceInclude Source="avares://KztekComponentAvalonia/Themes/KzToggleSwitch.axaml" />
     <ResourceInclude Source="avares://KztekComponentAvalonia/Themes/KzCheckedListBox.axaml" />
 
+    <!-- Phase 8 iAccess redesign (STEP-8.4): control moi -->
+    <ResourceInclude Source="avares://KztekComponentAvalonia/Themes/KzEmptyState.axaml" />
+    <ResourceInclude Source="avares://KztekComponentAvalonia/Themes/KzEventImageBox.axaml" />
+    <ResourceInclude Source="avares://KztekComponentAvalonia/Themes/KzStatusDot.axaml" />
+
     <!-- Selector-style themes: KzDataGrid, KzDateTimePicker → in App.axaml Styles -->
   </ResourceDictionary.MergedDictionaries>
 

@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls">
+
+  <ControlTheme x:Key="{x:Type kz:KzStatusDot}" TargetType="kz:KzStatusDot">
+    <Setter Property="Foreground" Value="{StaticResource kz.brush.text}" />
+    <Setter Property="FontSize" Value="{StaticResource kz.font.sm}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <Ellipse Name="PART_Dot"
+                   Width="{TemplateBinding DotSize}"
+                   Height="{TemplateBinding DotSize}"
+                   VerticalAlignment="Center" />
+          <TextBlock Text="{TemplateBinding Label}"
+                     IsVisible="{TemplateBinding ShowLabel}"
+                     Foreground="{TemplateBinding Foreground}"
+                     FontSize="{TemplateBinding FontSize}"
+                     VerticalAlignment="Center" />
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^.kz-dot-online /template/ Ellipse#PART_Dot">
+      <Setter Property="Fill" Value="{StaticResource kz.brush.success}" />
+    </Style>
+    <Style Selector="^.kz-dot-offline /template/ Ellipse#PART_Dot">
+      <Setter Property="Fill" Value="{StaticResource kz.brush.error}" />
+    </Style>
+    <Style Selector="^.kz-dot-warning /template/ Ellipse#PART_Dot">
+      <Setter Property="Fill" Value="{StaticResource kz.brush.warning}" />
+    </Style>
+    <Style Selector="^.kz-dot-unknown /template/ Ellipse#PART_Dot">
+      <Setter Property="Fill" Value="{StaticResource kz.brush.text.muted}" />
+    </Style>
+  </ControlTheme>
+
+</ResourceDictionary>

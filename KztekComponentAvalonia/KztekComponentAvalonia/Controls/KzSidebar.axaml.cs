@@ -73,10 +73,16 @@ public partial class KzSidebar : UserControl
     private void RebuildItems()
     {
         if (this.FindControl<ListBox>("NavList") is not { } lb) return;
+        // Items.Clear() reset selection về -1 và BẮN SelectionChanged(-1) xuống consumer
+        // (gặp thật ở iAccess STEP-8.4: crash khi shell nhận index -1 lúc attach)
+        // → giữ SelectedIndex trước khi clear và khôi phục sau khi add lại.
+        var keep = SelectedIndex;
         lb.Items.Clear();
         if (Items is null) return;
         foreach (var item in Items)
             lb.Items.Add(new KzSidebarItem { ItemLabel = item.Label, ItemIcon = item.Icon, Tag = item });
+        if (keep >= 0 && keep < lb.Items.Count)
+            lb.SelectedIndex = keep;
     }
 
     private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)

@@ -1,0 +1,43 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls">
+
+  <!-- Icon mặc định set trong code (KzEmptyState.cs — default của IconGeometryProperty) -->
+  <ControlTheme x:Key="{x:Type kz:KzEmptyState}" TargetType="kz:KzEmptyState">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Spacing="8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="24">
+          <PathIcon Data="{TemplateBinding IconGeometry}"
+                    Width="40" Height="40"
+                    Foreground="{StaticResource kz.brush.navy.300}"
+                    HorizontalAlignment="Center" />
+          <TextBlock Text="{TemplateBinding Title}"
+                     FontSize="{StaticResource kz.font.md}"
+                     FontWeight="SemiBold"
+                     Foreground="{StaticResource kz.brush.text}"
+                     TextAlignment="Center"
+                     TextWrapping="Wrap"
+                     HorizontalAlignment="Center" />
+          <TextBlock Text="{TemplateBinding Hint}"
+                     IsVisible="{TemplateBinding Hint, Converter={x:Static ObjectConverters.IsNotNull}}"
+                     FontSize="{StaticResource kz.font.sm}"
+                     Foreground="{StaticResource kz.brush.text.muted}"
+                     TextAlignment="Center"
+                     TextWrapping="Wrap"
+                     MaxWidth="320"
+                     HorizontalAlignment="Center" />
+          <ContentPresenter Content="{TemplateBinding ActionContent}"
+                            IsVisible="{TemplateBinding ActionContent, Converter={x:Static ObjectConverters.IsNotNull}}"
+                            HorizontalAlignment="Center"
+                            Margin="0,4,0,0" />
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+</ResourceDictionary>
