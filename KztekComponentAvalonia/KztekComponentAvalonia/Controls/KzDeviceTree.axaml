@@ -125,12 +125,16 @@
         </Grid>
       </Border>
 
-      <!-- TreeView -->
+      <!-- TreeView.
+           Fix F2 (iAccess UX-REVIEW 8.9): TreeView có ScrollViewer NỘI BỘ trong template mặc định —
+           phải Disabled scroll ngang qua attached property, nếu không BringIntoView khi select
+           tự scroll ngang làm cụt header dù ScrollViewer ngoài đã Disabled. -->
       <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                     VerticalScrollBarVisibility="Auto">
         <TreeView Name="PART_Tree"
                   Background="Transparent"
                   BorderThickness="0"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   Padding="6">
 
           <TreeView.ItemContainerTheme>
@@ -158,10 +162,12 @@
                            VerticalAlignment="Center"
                            Foreground="{Binding DeviceIconBrush}" />
 
-                <!-- Device name (color for cameras reflects slot availability) -->
+                <!-- Device name (color for cameras reflects slot availability).
+                     Fix F2: tooltip tên đầy đủ — đọc được khi text bị giới hạn bởi bề ngang panel. -->
                 <TextBlock Text="{Binding Name}"
                            FontSize="{StaticResource kz.font.md}"
                            VerticalAlignment="Center"
+                           ToolTip.Tip="{Binding Name}"
                            Foreground="{Binding NameBrush}" />
 
                 <!-- Slot count badge — visible on camera nodes only -->
