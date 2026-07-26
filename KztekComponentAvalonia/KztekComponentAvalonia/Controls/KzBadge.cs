@@ -51,6 +51,21 @@ public class KzBadge : TemplatedControl
         UpdateClasses();
     }
 
+    /// <summary>
+    /// Binding ghi THẲNG vào StyledProperty, KHÔNG đi qua CLR setter ở trên — nên nếu chỉ
+    /// cập nhật class trong setter thì <c>Variant="{Binding ...}"</c> sẽ không đổi màu.
+    ///
+    /// Lộ ra rõ nhất khi đặt KzBadge trong ô DataGrid: DataGrid tái sử dụng container khi
+    /// cuộn hoặc thêm dòng, badge giữ nguyên class của dòng cũ → cùng một nội dung mà mỗi
+    /// dòng hiện một màu khác nhau.
+    /// </summary>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == VariantProperty || change.Property == BadgeTypeProperty)
+            UpdateClasses();
+    }
+
     private void UpdateClasses()
     {
         // Remove all variant classes

@@ -20,6 +20,28 @@
     <Setter Property="Cursor"      Value="Hand" />
   </Style>
 
+  <!-- Giữ chữ TRẮNG ở mọi trạng thái của item cấp 1.
+       Thiếu phần này thì FluentTheme áp màu chữ tối lên nền navy khi hover/mở menu,
+       gần như không đọc được (phát hiện trên iPGSUseCam 2026-07-26). -->
+  <Style Selector="kz|KzMenu > MenuItem:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource kz.brush.white}" />
+  </Style>
+  <Style Selector="kz|KzMenu > MenuItem:selected">
+    <Setter Property="Foreground" Value="{DynamicResource kz.brush.white}" />
+  </Style>
+  <Style Selector="kz|KzMenu > MenuItem:open">
+    <Setter Property="Foreground" Value="{DynamicResource kz.brush.white}" />
+  </Style>
+  <Style Selector="kz|KzMenu > MenuItem:pointerover /template/ ContentPresenter">
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource kz.brush.white}" />
+  </Style>
+  <Style Selector="kz|KzMenu > MenuItem:selected /template/ ContentPresenter">
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource kz.brush.white}" />
+  </Style>
+  <Style Selector="kz|KzMenu > MenuItem:open /template/ ContentPresenter">
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource kz.brush.white}" />
+  </Style>
+
   <!-- Top-level hover — subtle white tint -->
   <Style Selector="kz|KzMenu > MenuItem:pointerover /template/ Border#PART_LayoutRoot">
     <Setter Property="Background" Value="#22FFFFFF" />
