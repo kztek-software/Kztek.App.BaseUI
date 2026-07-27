@@ -224,6 +224,6 @@ public partial class KzPasswordTextBox : UserControl
     private void ApplyWatermark()
     {
         if (this.FindControl<TextBox>("PART_Input") is { } tb)
-            tb.Watermark = Watermark;
+            tb.PlaceholderText = Watermark;
     }
 }
