@@ -91,6 +91,9 @@ public class KzDeviceNode : INotifyPropertyChanged
     public string DeviceIcon => DeviceType switch
     {
         KzDeviceType.Group      => "📁",
+        // Vẫn là ý nghĩa "group" (không phải thiết bị Gate vật lý) — dùng icon folder khác (mở) để
+        // phân biệt trực quan với group thường, không dùng icon cổng/barrier gây hiểu nhầm là thiết bị.
+        KzDeviceType.GateGroup  => "📂",
         KzDeviceType.Camera     => Status switch
         {
             KzDeviceStatus.Offline => "🚫",
@@ -161,8 +164,8 @@ public class KzDeviceNode : INotifyPropertyChanged
         _                      => "Không xác định",
     };
 
-    public bool IsGroup => DeviceType == KzDeviceType.Group;
-    public bool IsLeaf  => DeviceType != KzDeviceType.Group;
+    public bool IsGroup => DeviceType is KzDeviceType.Group or KzDeviceType.GateGroup;
+    public bool IsLeaf  => !IsGroup;
 
     // ── INotifyPropertyChanged ────────────────────────────────────────────────
     public event PropertyChangedEventHandler? PropertyChanged;

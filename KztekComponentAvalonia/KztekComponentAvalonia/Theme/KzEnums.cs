@@ -51,5 +51,9 @@ public enum KzDeviceType
     Sensor,
     Server,
     Network,
-    Generic
+    Generic,
+
+    /// <summary>Node nhóm theo Gate (cổng bãi xe) — hành xử như <see cref="Group"/> (IsGroup/IsLeaf,
+    /// đếm online) nhưng icon riêng để phân biệt trực quan với group thường (VD: root "Danh sách thiết bị").</summary>
+    GateGroup
 }
