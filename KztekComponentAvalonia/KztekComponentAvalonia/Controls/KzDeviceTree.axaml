@@ -1,11 +1,19 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:kz="clr-namespace:KztekComponentAvalonia.Controls"
-             x:Class="KztekComponentAvalonia.Controls.KzDeviceTree">
+             x:Class="KztekComponentAvalonia.Controls.KzDeviceTree"
+             mc:Ignorable="d" 
+             d:DesignWidth="400" d:DesignHeight="300">
 
   <UserControl.Resources>
-    <!-- TreeViewItem theme — Navy/Orange KZTEK style -->
-    <ControlTheme x:Key="KzTreeItem" TargetType="TreeViewItem" x:DataType="kz:KzDeviceNode">
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://KztekComponentAvalonia/Theme/KzTokens.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <!-- TreeViewItem theme — Navy/Orange KZTEK style -->
+      <ControlTheme x:Key="KzTreeItem" TargetType="TreeViewItem" x:DataType="kz:KzDeviceNode">
       <Setter Property="Background" Value="Transparent" />
       <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
       <Setter Property="Foreground" Value="{StaticResource kz.brush.text}" />
@@ -93,6 +101,7 @@
         <Setter Property="TextElement.FontWeight" Value="SemiBold" />
       </Style>
     </ControlTheme>
+    </ResourceDictionary>
   </UserControl.Resources>
 
   <Border Background="{StaticResource kz.brush.white}"
@@ -150,11 +159,8 @@
                 <TextBlock FontSize="11"
                            VerticalAlignment="Center"
                            Text="{Binding StatusIcon}"
-                           IsVisible="{Binding IsLeaf}">
-                  <TextBlock.Foreground>
-                    <SolidColorBrush Color="{Binding StatusColor}" />
-                  </TextBlock.Foreground>
-                </TextBlock>
+                           Foreground="{Binding StatusBrush}"
+                           IsVisible="{Binding IsLeaf}" />
 
                 <!-- Device icon -->
                 <TextBlock Text="{Binding DeviceIcon}"
@@ -190,16 +196,11 @@
                 <!-- Status badge (leaf nodes only) -->
                 <Border CornerRadius="4" Padding="5,1"
                         VerticalAlignment="Center"
+                        Background="{Binding StatusBadgeBrush}"
                         IsVisible="{Binding IsLeaf}">
-                  <Border.Background>
-                    <SolidColorBrush Color="{Binding StatusBadgeBackground}" />
-                  </Border.Background>
                   <TextBlock Text="{Binding StatusLabel}"
-                             FontSize="10" FontWeight="SemiBold">
-                    <TextBlock.Foreground>
-                      <SolidColorBrush Color="{Binding StatusColor}" />
-                    </TextBlock.Foreground>
-                  </TextBlock>
+                             FontSize="10" FontWeight="SemiBold"
+                             Foreground="{Binding StatusBrush}" />
                 </Border>
 
               </StackPanel>

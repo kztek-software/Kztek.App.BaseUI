@@ -90,6 +90,7 @@ public class KzKeyboard : Control
         get => GetValue(TelexEnabledProperty);
         set
         {
+            if (GetValue(TelexEnabledProperty) == value) return;
             SetValue(TelexEnabledProperty, value);
             TelexResetSyllable();
             InvalidateVisual();
@@ -100,7 +101,6 @@ public class KzKeyboard : Control
     private KzKeyboardMode _mode           = KzKeyboardMode.Alpha;
     private bool           _shifted        = false;
     private bool           _capsLock       = false;
-    private bool           _telexEnabled   = false;
     private string?        _pressedVal;
 
     private readonly List<(Rect R, KD Key)> _layout = new();
@@ -187,17 +187,20 @@ public class KzKeyboard : Control
         string val         = ResolveVal(key);
         bool   pressed     = _pressedVal == val;
         bool   shiftActive = val == "SHIFT" && (_shifted || _capsLock);
-        bool   telexActive = val == "TELEX" && _telexEnabled;
+        bool   telexActive = val == "TELEX" && TelexEnabled;
 
         IBrush bg = pressed || shiftActive || telexActive ? PressedBg
                   : key.Special                           ? KeyBgSpec
                   : KeyBg;
         IBrush fg = (pressed || shiftActive || telexActive) ? PressedFg : KeyFg;
 
-        // Telex key shows toggled label
+        // Telex key label reflects the CURRENT active mode (matches the dark/active highlight),
+        // not the mode you'd switch into — VIE lit up while Telex is on, ENG while it's off.
         string lbl = val == "TELEX"
-            ? (_telexEnabled ? "ENG" : "VIE")
-            : ResolveLabel(key);
+            ? (TelexEnabled ? "VIE" : "ENG")
+            : val == "SHIFT"
+                ? (_capsLock ? "⇪" : _shifted ? "⬆" : "⇧")
+                : ResolveLabel(key);
 
         // Drop shadow
         if (!pressed)
@@ -211,11 +214,7 @@ public class KzKeyboard : Control
 
         if (lbl.Length == 0) return;
 
-        double fs = r.Height < 30 ? 7.5
-                  : r.Height < 42 ? 9.5
-                  : r.Height < 58 ? 11.0
-                  : r.Height < 80 ? 15.0
-                  : 18.0;
+        double fs = Math.Clamp(r.Height * 0.34, 7.5, 34.0);
 
         if      (lbl.Length >= 9) fs = Math.Max(fs * 0.52, 6.0);
         else if (lbl.Length >= 5) fs = Math.Max(fs * 0.85, 7.0);
@@ -256,11 +255,14 @@ public class KzKeyboard : Control
             InvalidateVisual();
             ProcessKey(val);
 
-            _ = System.Threading.Tasks.Task.Delay(110).ContinueWith(_ =>
+            var resetTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(110) };
+            resetTimer.Tick += (_, _) =>
             {
+                resetTimer.Stop();
                 _pressedVal = null;
-                DispatcherTimer.RunOnce(InvalidateVisual, TimeSpan.Zero);
-            });
+                InvalidateVisual();
+            };
+            resetTimer.Start();
             break;
         }
     }
@@ -277,9 +279,7 @@ public class KzKeyboard : Control
                 return;
 
             case "TELEX":
-                _telexEnabled = !_telexEnabled;
-                TelexResetSyllable();
-                InvalidateVisual();
+                TelexEnabled = !TelexEnabled;
                 return;
 
             case "BACK":
@@ -289,7 +289,8 @@ public class KzKeyboard : Control
 
             case "ENTER":
                 TelexResetSyllable();
-                TypeTextRaw("\n");
+                if (TargetTextBox?.AcceptsReturn == true)
+                    TypeTextRaw("\n");
                 KeyPressed?.Invoke(this, "ENTER");
                 return;
 
@@ -309,7 +310,7 @@ public class KzKeyboard : Control
                 return;
 
             default:
-                if (_telexEnabled && val.Length == 1 && char.IsLetter(val[0]))
+                if (TelexEnabled && val.Length == 1 && char.IsLetter(val[0]))
                     TypeTelex(val);
                 else
                 {

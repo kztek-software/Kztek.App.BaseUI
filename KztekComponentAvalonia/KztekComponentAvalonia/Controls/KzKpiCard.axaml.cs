@@ -97,12 +97,26 @@ public partial class KzKpiCard : UserControl
     private void ApplySubtitle(string? text)
     {
         if (this.FindControl<TextBlock>("KpiSubtitle") is { } tb)
+        {
             tb.Text = text ?? string.Empty;
+            tb.IsVisible = !string.IsNullOrEmpty(text);
+        }
+        UpdateBottomRowVisibility();
     }
 
     private void ApplyShowDelta(bool show)
     {
+        if (this.FindControl<KzBadge>("DeltaBadge") is { } badge)
+            badge.IsVisible = show;
+        UpdateBottomRowVisibility();
+    }
+
+    /// <summary>Tách "hiện delta badge" khỏi "hiện subtitle" (trước đây gộp chung 1 cờ ShowDelta
+    /// làm ẩn LUÔN subtitle — không dùng được cho KPI trạng thái tức thời cần phụ đề nhưng không có
+    /// delta % kỳ trước, VD Dashboard). DeltaRow (hàng chứa cả 2) chỉ ẩn khi CẢ HAI đều tắt.</summary>
+    private void UpdateBottomRowVisibility()
+    {
         if (this.FindControl<StackPanel>("DeltaRow") is { } row)
-            row.IsVisible = show;
+            row.IsVisible = ShowDelta || !string.IsNullOrEmpty(Subtitle);
     }
 }

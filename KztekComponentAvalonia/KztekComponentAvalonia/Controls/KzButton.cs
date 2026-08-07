@@ -50,7 +50,31 @@ public class KzButton : Button
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        UpdateStyleClasses();
+
+        // CHỈ tự sinh class theo Variant/KzSize khi 1 trong 2 property này đã được
+        // set rõ ràng (qua binding/code). Nếu không, gọi UpdateStyleClasses() vô điều
+        // kiện sẽ XÓA class gán tay qua XAML (Classes="kz-btn-primary kz-size-sm") và
+        // ép về mặc định Variant=Primary/KzSize=Md — cùng họ bug với KzBadge, xem
+        // lesson avalonia-kzbadge-onattachedtovisualtree-forces-neutral-class.md.
+        if (IsSet(VariantProperty) || IsSet(KzSizeProperty))
+        {
+            UpdateStyleClasses();
+        }
+    }
+
+    /// <summary>
+    /// Binding ghi THẲNG vào StyledProperty, KHÔNG đi qua CLR setter ở trên — nên nếu
+    /// chỉ cập nhật class trong setter thì <c>Variant="{Binding ...}"</c> sẽ không đổi
+    /// màu/size. Bắt buộc có handler này song song với CLR setter (cùng nguyên tắc đã
+    /// ghi ở lesson avalonia-control-overwrites-xaml-property.md).
+    /// </summary>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == VariantProperty || change.Property == KzSizeProperty)
+        {
+            UpdateStyleClasses();
+        }
     }
 
     private void UpdateStyleClasses()

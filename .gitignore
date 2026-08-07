@@ -8,3 +8,10 @@
 # Copy thu cong vao dung thu muc tai may dev/deploy truoc khi build/publish (xem ghi chu
 # trong Kztek.VideoPlayer.Avalonia.csproj / Kztek.Cameras.Avalonia.csproj).
 **/runtimes/*/native/*.so*
+
+# File nen/backup/package output - khong commit vao git (chong phinh .git)
+*.rar
+*.zip
+*.7z
+*.deb
+dist/

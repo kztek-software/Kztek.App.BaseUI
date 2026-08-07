@@ -39,10 +39,10 @@ public class KzDeviceNode : INotifyPropertyChanged
             OnPropertyChanged();
             OnPropertyChanged(nameof(DeviceIcon));
             OnPropertyChanged(nameof(DeviceIconBrush));
-            OnPropertyChanged(nameof(StatusColor));
+            OnPropertyChanged(nameof(StatusBrush));
             OnPropertyChanged(nameof(StatusLabel));
             OnPropertyChanged(nameof(StatusIcon));
-            OnPropertyChanged(nameof(StatusBadgeBackground));
+            OnPropertyChanged(nameof(StatusBadgeBrush));
         }
     }
 
@@ -92,7 +92,7 @@ public class KzDeviceNode : INotifyPropertyChanged
     {
         KzDeviceType.Group      => "📁",
         // Vẫn là ý nghĩa "group" (không phải thiết bị Gate vật lý) — dùng icon folder khác (mở) để
-        // phân biệt trực quan với group thường, không dùng icon cổng/barrier gây hiểu nhầm là thiết bị.
+        // phân biệt trực quan với group gốc, không dùng icon cổng/barrier gây hiểu nhầm là thiết bị.
         KzDeviceType.GateGroup  => "📂",
         KzDeviceType.Camera     => Status switch
         {
@@ -107,7 +107,13 @@ public class KzDeviceNode : INotifyPropertyChanged
             KzDeviceStatus.Warning => "⚠",
             _                      => "○",
         },
-        KzDeviceType.Controller => "🖥",
+        KzDeviceType.Controller => Status switch
+        {
+            KzDeviceStatus.Online  => "🖥",
+            KzDeviceStatus.Offline => "🚫",
+            KzDeviceStatus.Warning => "⚠",
+            _                      => "🖥",
+        },
         KzDeviceType.EntryGate  => "🚗",
         KzDeviceType.ExitGate   => "🚪",
         KzDeviceType.Server     => "🖧",
@@ -132,20 +138,26 @@ public class KzDeviceNode : INotifyPropertyChanged
         ? new SolidColorBrush(Color.Parse("#F05922"))
         : new SolidColorBrush(Colors.Black);
 
-    public string StatusColor => Status switch
+    /// <summary>Fix 2026-08-03: đổi string → IBrush (như <see cref="SlotBrush"/>/<see cref="DeviceIconBrush"/>).
+    /// Bind thẳng <c>Color="{Binding StatusColor}"</c> (string) vào <c>SolidColorBrush.Color</c>
+    /// (kiểu <c>Avalonia.Media.Color</c>) không tự convert qua runtime Binding → spam lỗi
+    /// "Could not convert '#EF4444' (System.String) to 'Avalonia.Media.Color'" mỗi lần Status đổi,
+    /// và màu KHÔNG được set (rơi về mặc định) — badge/icon trạng thái thiết bị hiển thị sai màu.</summary>
+    public IBrush StatusBrush => Status switch
     {
-        KzDeviceStatus.Online  => "#22C55E",
-        KzDeviceStatus.Offline => "#EF4444",
-        KzDeviceStatus.Warning => "#F59E0B",
-        _                      => "#9CA3AF",
+        KzDeviceStatus.Online  => new SolidColorBrush(Color.Parse("#22C55E")),
+        KzDeviceStatus.Offline => new SolidColorBrush(Color.Parse("#EF4444")),
+        KzDeviceStatus.Warning => new SolidColorBrush(Color.Parse("#F59E0B")),
+        _                      => new SolidColorBrush(Color.Parse("#9CA3AF")),
     };
 
-    public string StatusBadgeBackground => Status switch
+    /// <summary>Fix 2026-08-03: string → IBrush — cùng lý do <see cref="StatusBrush"/>.</summary>
+    public IBrush StatusBadgeBrush => Status switch
     {
-        KzDeviceStatus.Online  => "#DCFCE7",
-        KzDeviceStatus.Offline => "#FEE2E2",
-        KzDeviceStatus.Warning => "#FEF3C7",
-        _                      => "#F3F4F6",
+        KzDeviceStatus.Online  => new SolidColorBrush(Color.Parse("#DCFCE7")),
+        KzDeviceStatus.Offline => new SolidColorBrush(Color.Parse("#FEE2E2")),
+        KzDeviceStatus.Warning => new SolidColorBrush(Color.Parse("#FEF3C7")),
+        _                      => new SolidColorBrush(Color.Parse("#F3F4F6")),
     };
 
     public string StatusIcon => Status switch

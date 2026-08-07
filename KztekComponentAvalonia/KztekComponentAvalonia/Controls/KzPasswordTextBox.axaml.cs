@@ -140,7 +140,7 @@ public partial class KzPasswordTextBox : UserControl
         if (this.FindControl<Path>("PART_EyeOpen") is { } eyeOpen)
             eyeOpen.IsVisible = !_showPassword;
 
-        if (this.FindControl<Canvas>("PART_EyeSlash") is { } eyeSlash)
+        if (this.FindControl<Path>("PART_EyeSlash") is { } eyeSlash)
             eyeSlash.IsVisible = _showPassword;
     }
 
