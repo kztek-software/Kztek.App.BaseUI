@@ -1,0 +1,82 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.claude/**'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual re-publish'
+        type: string
+
+jobs:
+  build-pack-publish:
+    name: Build, Pack and Publish Kztek.App.BaseUI packages to BaGet
+    # UseWindowsForms=true (KztekComponent) va P/Invoke FFmpeg DLL (Kztek.VideoPlayer.Avalonia)
+    # -> bat buoc build tren Windows.
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      # Kztek.Object.Entity, Kztek.Tool, ReadPL... la package noi bo,
+      # chi nam tren BaGet feed cua KZTEK, khong co tren nuget.org.
+      - name: Add KZTEK BaGet NuGet source
+        run: dotnet nuget add source https://nuget.kztek.io.vn/v3/index.json -n kztek-baget
+
+      - name: Restore KztekComponent
+        run: dotnet restore KztekComponent/KztekComponent.csproj
+
+      - name: Restore KztekComponentAvalonia
+        run: dotnet restore KztekComponentAvalonia/KztekComponentAvalonia/KztekComponentAvalonia.csproj
+
+      - name: Restore Kztek.VideoPlayer.Avalonia
+        run: dotnet restore Kztek.VideoPlayer.Avalonia/Kztek.VideoPlayer.Avalonia.csproj
+
+      - name: Build KztekComponent (Release)
+        run: dotnet build KztekComponent/KztekComponent.csproj -c Release --no-restore
+
+      - name: Build KztekComponentAvalonia (Release)
+        run: dotnet build KztekComponentAvalonia/KztekComponentAvalonia/KztekComponentAvalonia.csproj -c Release --no-restore
+
+      - name: Build Kztek.VideoPlayer.Avalonia (Release)
+        run: dotnet build Kztek.VideoPlayer.Avalonia/Kztek.VideoPlayer.Avalonia.csproj -c Release --no-restore
+
+      - name: Pack KztekComponent
+        run: dotnet pack KztekComponent/KztekComponent.csproj -c Release --no-restore --output ./nupkgs
+
+      - name: Pack KztekComponentAvalonia
+        run: dotnet pack KztekComponentAvalonia/KztekComponentAvalonia/KztekComponentAvalonia.csproj -c Release --no-restore --output ./nupkgs
+
+      - name: Pack Kztek.VideoPlayer.Avalonia
+        run: dotnet pack Kztek.VideoPlayer.Avalonia/Kztek.VideoPlayer.Avalonia.csproj -c Release --no-restore --output ./nupkgs
+
+      - name: List packages to be published
+        run: Get-ChildItem ./nupkgs
+
+      # dotnet nuget push khong expand wildcard "*.nupkg" on dinh tren Windows runner
+      # (loi "File does not exist") -> liet ke file that bang Get-ChildItem roi push tung file.
+      - name: Push to BaGet
+        if: github.ref == 'refs/heads/master'
+        run: |
+          Get-ChildItem ./nupkgs/*.nupkg | ForEach-Object {
+            dotnet nuget push $_.FullName `
+              --api-key "${{ secrets.BAGET_API_KEY }}" `
+              --source https://nuget.kztek.io.vn/v3/index.json `
+              --skip-duplicate
+          }
