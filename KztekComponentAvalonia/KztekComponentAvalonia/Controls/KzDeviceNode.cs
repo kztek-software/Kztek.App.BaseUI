@@ -232,14 +232,14 @@ public class KzDeviceNode : INotifyPropertyChanged
     public int GroupOnlineCount
     {
         get => _groupOnlineCount;
-        set { if (_groupOnlineCount == value) return; _groupOnlineCount = value; OnPropertyChanged(); }
+        set { if (_groupOnlineCount == value) return; _groupOnlineCount = value; OnPropertyChanged(); OnPropertyChanged(nameof(ShowGroupBadges)); }
     }
 
     /// <summary>Số thiết bị Offline tính đệ quy trong group. App tính, node giữ giá trị.</summary>
     public int GroupOfflineCount
     {
         get => _groupOfflineCount;
-        set { if (_groupOfflineCount == value) return; _groupOfflineCount = value; OnPropertyChanged(); }
+        set { if (_groupOfflineCount == value) return; _groupOfflineCount = value; OnPropertyChanged(); OnPropertyChanged(nameof(ShowGroupBadges)); }
     }
 
     /// <summary>Điều kiện IsVisible tổng hợp: chỉ hiện chip khi (a) không phải leaf,
