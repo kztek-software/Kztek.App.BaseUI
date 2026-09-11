@@ -111,6 +111,16 @@
     <SolidColorBrush x:Key="kz.brush.neutral.bg"   Color="{StaticResource kz.color.neutral.bg}" />
     <SolidColorBrush x:Key="kz.brush.neutral.text" Color="{StaticResource kz.color.neutral.text}" />
 
+    <!-- Status tints (online / offline) — alias cho badge trạng thái nhóm thiết bị KzDeviceTree -->
+    <Color x:Key="kz.color.status.online.bg">#DCFCE7</Color>
+    <Color x:Key="kz.color.status.online.fg">#22C55E</Color>
+    <Color x:Key="kz.color.status.offline.bg">#FEE2E2</Color>
+    <Color x:Key="kz.color.status.offline.fg">#EF4444</Color>
+    <SolidColorBrush x:Key="kz.brush.status.online.bg"  Color="{StaticResource kz.color.status.online.bg}" />
+    <SolidColorBrush x:Key="kz.brush.status.online.fg"  Color="{StaticResource kz.color.status.online.fg}" />
+    <SolidColorBrush x:Key="kz.brush.status.offline.bg" Color="{StaticResource kz.color.status.offline.bg}" />
+    <SolidColorBrush x:Key="kz.brush.status.offline.fg" Color="{StaticResource kz.color.status.offline.fg}" />
+
     <!-- Accent tints -->
     <Color x:Key="kz.color.accent.bg">#FEF0E9</Color>
     <Color x:Key="kz.color.accent.text">#C2440E</Color>

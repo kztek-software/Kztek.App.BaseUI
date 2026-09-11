@@ -92,9 +92,13 @@
         <Setter Property="Background" Value="{StaticResource kz.brush.navy.100}" />
       </Style>
 
-      <!-- Selected -->
+      <!-- Selected — navy.100 (#F5F3FA) gần trắng, khó phân biệt với nền trắng của panel.
+           Dùng navy.300 (#B8B3D6, "Navy nhạt — background nhẹ" theo brand KZTEK) + viền trái Cam
+           để nổi bật rõ item đang chọn, vẫn phân biệt được với hover (navy.100). -->
       <Style Selector="^:selected /template/ Border#PART_RowBorder">
-        <Setter Property="Background" Value="{StaticResource kz.brush.navy.100}" />
+        <Setter Property="Background" Value="{StaticResource kz.brush.navy.300}" />
+        <Setter Property="BorderBrush" Value="{StaticResource kz.brush.orange.500}" />
+        <Setter Property="BorderThickness" Value="3,0,0,0" />
       </Style>
       <Style Selector="^:selected /template/ ContentPresenter#PART_HeaderPresenter">
         <Setter Property="TextElement.Foreground" Value="{StaticResource kz.brush.navy.900}" />
@@ -153,49 +157,95 @@
           <TreeView.ItemTemplate>
             <TreeDataTemplate DataType="kz:KzDeviceNode"
                               ItemsSource="{Binding Children}">
-              <StackPanel Orientation="Horizontal" Spacing="6" Height="30">
+              <!-- Fix "uốn lượn" (2026-08-25): dùng Grid thay StackPanel — cột tên "*" co giãn
+                   + ellipsis, cột IP/badge trạng thái "Auto" luôn neo cố định ở lề phải, không
+                   còn trôi theo độ dài tên như StackPanel Horizontal trước đây. -->
+              <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto" Height="30">
 
                 <!-- Status icon (leaf nodes only) -->
-                <TextBlock FontSize="11"
+                <TextBlock Grid.Column="0"
+                           FontSize="11"
                            VerticalAlignment="Center"
+                           Margin="0,0,6,0"
                            Text="{Binding StatusIcon}"
                            Foreground="{Binding StatusBrush}"
                            IsVisible="{Binding IsLeaf}" />
 
                 <!-- Device icon -->
-                <TextBlock Text="{Binding DeviceIcon}"
+                <TextBlock Grid.Column="1"
+                           Text="{Binding DeviceIcon}"
                            FontSize="14"
                            VerticalAlignment="Center"
+                           Margin="0,0,6,0"
                            Foreground="{Binding DeviceIconBrush}" />
 
                 <!-- Device name (color for cameras reflects slot availability).
                      Fix F2: tooltip tên đầy đủ — đọc được khi text bị giới hạn bởi bề ngang panel. -->
-                <TextBlock Text="{Binding Name}"
+                <TextBlock Grid.Column="2"
+                           Text="{Binding Name}"
                            FontSize="{StaticResource kz.font.md}"
                            VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
                            ToolTip.Tip="{Binding Name}"
                            Foreground="{Binding NameBrush}" />
 
-                <!-- Slot count badge — visible on camera nodes only -->
-                <Border CornerRadius="4" Padding="5,1"
-                        VerticalAlignment="Center"
-                        Background="{Binding SlotBrush}"
-                        IsVisible="{Binding HasSlots}">
-                  <TextBlock Text="{Binding SlotText}"
-                             FontSize="10" FontWeight="SemiBold"
-                             Foreground="White" />
-                </Border>
+                <!-- Slot badge — camera nodes only: số slot trống + nhãn Còn slot / Hết slot.
+                     Tách khỏi badge trạng thái (cột 5) vì slot KHÔNG phải trạng thái kết nối. -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            IsVisible="{Binding HasSlots}">
+                  <Border CornerRadius="4" Padding="5,1"
+                          Margin="6,0,0,0"
+                          Background="{Binding SlotBrush}">
+                    <TextBlock Text="{Binding SlotText}"
+                               FontSize="10" FontWeight="SemiBold"
+                               Foreground="White" />
+                  </Border>
+                  <Border CornerRadius="4" Padding="5,1"
+                          Margin="4,0,0,0"
+                          Background="Transparent"
+                          BorderThickness="1"
+                          BorderBrush="{Binding SlotBrush}">
+                    <TextBlock Text="{Binding SlotLabel}"
+                               FontSize="10" FontWeight="SemiBold"
+                               Foreground="{Binding SlotBrush}" />
+                  </Border>
+                </StackPanel>
+
+                <!-- Group badges — 2 chip Online (xanh) / Offline (đỏ) trên node group.
+                     Cùng Column=3 với slot badge — loại trừ nhau: group không có slot,
+                     leaf không có ShowGroupBadges=true → KHÔNG phá layout hiện có. -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="4"
+                            VerticalAlignment="Center" Margin="6,0"
+                            IsVisible="{Binding ShowGroupBadges}">
+                  <Border CornerRadius="4" Padding="5,1"
+                          Background="{DynamicResource kz.brush.status.online.bg}">
+                    <TextBlock Text="{Binding GroupOnlineCount}"
+                               Foreground="{DynamicResource kz.brush.status.online.fg}"
+                               FontSize="11" FontWeight="SemiBold"/>
+                  </Border>
+                  <Border CornerRadius="4" Padding="5,1"
+                          Background="{DynamicResource kz.brush.status.offline.bg}">
+                    <TextBlock Text="{Binding GroupOfflineCount}"
+                               Foreground="{DynamicResource kz.brush.status.offline.fg}"
+                               FontSize="11" FontWeight="SemiBold"/>
+                  </Border>
+                </StackPanel>
 
                 <!-- IP hint for leaf nodes -->
-                <TextBlock Text="{Binding IpAddress}"
+                <TextBlock Grid.Column="4"
+                           Text="{Binding IpAddress}"
                            FontSize="{StaticResource kz.font.sm}"
                            Foreground="{StaticResource kz.brush.text.muted}"
                            VerticalAlignment="Center"
+                           Margin="10,0,0,0"
                            IsVisible="{Binding IsLeaf}" />
 
-                <!-- Status badge (leaf nodes only) -->
-                <Border CornerRadius="4" Padding="5,1"
+                <!-- Status badge (leaf nodes only) — neo cố định ở cột cuối, luôn căn phải -->
+                <Border Grid.Column="5" CornerRadius="4" Padding="5,1"
                         VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="10,0,0,0"
                         Background="{Binding StatusBadgeBrush}"
                         IsVisible="{Binding IsLeaf}">
                   <TextBlock Text="{Binding StatusLabel}"
@@ -203,7 +253,7 @@
                              Foreground="{Binding StatusBrush}" />
                 </Border>
 
-              </StackPanel>
+              </Grid>
             </TreeDataTemplate>
           </TreeView.ItemTemplate>
 
