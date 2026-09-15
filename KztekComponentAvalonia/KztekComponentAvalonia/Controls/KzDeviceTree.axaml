@@ -148,7 +148,8 @@
                   Background="Transparent"
                   BorderThickness="0"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  Padding="6">
+                  Padding="6"
+                  Grid.IsSharedSizeScope="True">
 
           <TreeView.ItemContainerTheme>
             <StaticResource ResourceKey="KzTreeItem" />
@@ -160,7 +161,21 @@
               <!-- Fix "uốn lượn" (2026-08-25): dùng Grid thay StackPanel — cột tên "*" co giãn
                    + ellipsis, cột IP/badge trạng thái "Auto" luôn neo cố định ở lề phải, không
                    còn trôi theo độ dài tên như StackPanel Horizontal trước đây. -->
-              <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto" Height="30">
+              <Grid Height="30">
+                <Grid.ColumnDefinitions>
+                  <!-- Col0: status icon (leaf only) — shared để icon thẳng hàng giữa các dòng -->
+                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.statusicon"/>
+                  <!-- Col1: device icon — shared để icon thẳng hàng -->
+                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.deviceicon"/>
+                  <!-- Col2: tên thiết bị — "*" hấp thụ phần còn lại, không cần SharedSizeGroup -->
+                  <ColumnDefinition Width="*"/>
+                  <!-- Col3: slot badge / group badge (loại trừ nhau) — shared để badge thẳng hàng -->
+                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.slot"/>
+                  <!-- Col4: IP address (leaf only) — shared để IP thẳng hàng -->
+                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.ip"/>
+                  <!-- Col5: status badge (leaf only) — shared để badge trạng thái thẳng hàng -->
+                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.status"/>
+                </Grid.ColumnDefinitions>
 
                 <!-- Status icon (leaf nodes only) -->
                 <TextBlock Grid.Column="0"
