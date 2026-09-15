@@ -151,8 +151,7 @@
                   Background="Transparent"
                   BorderThickness="0"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  Padding="6"
-                  Grid.IsSharedSizeScope="True">
+                  Padding="6">
 
           <TreeView.ItemContainerTheme>
             <StaticResource ResourceKey="KzTreeItem" />
@@ -166,18 +165,18 @@
                    còn trôi theo độ dài tên như StackPanel Horizontal trước đây. -->
               <Grid Height="30">
                 <Grid.ColumnDefinitions>
-                  <!-- Col0: status icon (leaf only) — shared để icon thẳng hàng giữa các dòng -->
-                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.statusicon"/>
-                  <!-- Col1: device icon — shared để icon thẳng hàng -->
-                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.deviceicon"/>
-                  <!-- Col2: tên thiết bị — "*" hấp thụ phần còn lại, không cần SharedSizeGroup -->
+                  <!-- Col0: status icon (leaf only) — fixed 20px, đủ cho ký tự icon -->
+                  <ColumnDefinition Width="20"/>
+                  <!-- Col1: device icon — fixed 22px -->
+                  <ColumnDefinition Width="22"/>
+                  <!-- Col2: tên thiết bị — "*" hấp thụ phần còn lại -->
                   <ColumnDefinition Width="*"/>
-                  <!-- Col3: slot badge / group badge (loại trừ nhau) — shared để badge thẳng hàng -->
-                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.slot"/>
-                  <!-- Col4: IP address (leaf only) — shared để IP thẳng hàng -->
-                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.ip"/>
-                  <!-- Col5: status badge (leaf only) — shared để badge trạng thái thẳng hàng -->
-                  <ColumnDefinition Width="Auto" SharedSizeGroup="kzdevtree.col.status"/>
+                  <!-- Col3: slot badge / group badge (loại trừ nhau) -->
+                  <ColumnDefinition Width="Auto"/>
+                  <!-- Col4: IP address (leaf only) -->
+                  <ColumnDefinition Width="Auto"/>
+                  <!-- Col5: status badge (leaf only) -->
+                  <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Status icon (leaf nodes only) -->
