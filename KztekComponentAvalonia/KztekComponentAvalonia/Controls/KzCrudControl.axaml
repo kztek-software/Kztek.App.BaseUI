@@ -28,8 +28,9 @@
               CanUserReorderColumns="True"
               CanUserResizeColumns="True"
               CanUserSortColumns="True"
+              ColumnWidth="Auto"
               IsReadOnly="True"
-              SelectionMode="Single"
+              SelectionMode="Extended"
               HorizontalScrollBarVisibility="Auto"
               VerticalScrollBarVisibility="Auto" />
 

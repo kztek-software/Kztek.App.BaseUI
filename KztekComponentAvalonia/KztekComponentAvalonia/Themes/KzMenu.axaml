@@ -95,13 +95,20 @@
     </Style>
 
     <!-- ── Popup / Dropdown panel ────────────────────────────────────────────── -->
-    <Style Selector="kz|KzMenu > MenuItem > Popup > Border">
-        <Setter Property="Background"       Value="{DynamicResource kz.brush.white}" />
-        <Setter Property="BorderBrush"      Value="{DynamicResource kz.brush.border}" />
-        <Setter Property="BorderThickness"  Value="1" />
-        <Setter Property="CornerRadius"     Value="8" />
-        <Setter Property="BoxShadow"        Value="{DynamicResource kz.shadow.lg}" />
-        <Setter Property="Padding"          Value="4" />
+    <!--
+        FIX: Selector "Popup > Border" không hoạt động trên Linux/Ubuntu vì Avalonia
+        render Popup trong PopupRoot riêng (separate OS window), style selector không
+        thể traverse qua ranh giới đó → dropdown bị nền đen trên Ubuntu.
+
+        Giải pháp cross-platform: style MenuFlyoutPresenter (host của submenu Popup).
+        MenuFlyoutPresenter là control nằm BÊN TRONG PopupRoot, selector áp dụng trực tiếp.
+    -->
+    <Style Selector="kz|KzMenu > MenuItem MenuFlyoutPresenter">
+        <Setter Property="Background"      Value="{DynamicResource kz.brush.white}" />
+        <Setter Property="BorderBrush"     Value="{DynamicResource kz.brush.border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius"    Value="8" />
+        <Setter Property="Padding"         Value="4" />
     </Style>
 
     <!-- ── Nested MenuItem (dropdown items) ──────────────────────────────────── -->

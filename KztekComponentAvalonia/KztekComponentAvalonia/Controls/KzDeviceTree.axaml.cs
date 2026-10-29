@@ -189,7 +189,7 @@ public partial class KzDeviceTree : UserControl
         int n = 0;
         foreach (var node in nodes)
         {
-            if (node.IsLeaf) n++;
+            if (node.ShowStatus) n++;
             n += CountAll(node.Children);
         }
         return n;
@@ -200,7 +200,7 @@ public partial class KzDeviceTree : UserControl
         int n = 0;
         foreach (var node in nodes)
         {
-            if (node.IsLeaf && node.Status == status) n++;
+            if (node.ShowStatus && node.Status == status) n++;
             n += CountStatus(node.Children, status);
         }
         return n;

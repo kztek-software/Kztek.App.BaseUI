@@ -57,6 +57,15 @@
                 </StackPanel>
             </kz:KzButton>
 
+            <!-- Bulk Delete (ẩn mặc định — bật qua ShowBulkDelete=true tại caller) -->
+            <kz:KzButton Name="PART_BtnBulkDelete"
+                         Variant="Danger" KzSize="Sm" Focusable="False"
+                         IsVisible="False" IsEnabled="False">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBlock Name="PART_LblBulkDelete" Text="Xóa nhiều" />
+                </StackPanel>
+            </kz:KzButton>
+
             <!-- Divider -->
             <Border Name="PART_Divider"
                     Width="1" Margin="2,4"
@@ -75,9 +84,9 @@
             <kz:KzButton Name="PART_BtnImport"
                          Variant="Ghost" KzSize="Sm"
                          IsVisible="False" Focusable="False">
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="📥" FontFamily="{StaticResource kz.font.icon}" FontSize="15" VerticalAlignment="Center" />
-                    <TextBlock Name="PART_LblImport" Text="Import" />
+                <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                    <TextBlock Text="📥" Margin="0,0,0,2" FontFamily="{StaticResource kz.font.icon}" FontSize="15" VerticalAlignment="Center" />
+                    <TextBlock Name="PART_LblImport" Text="Import" VerticalAlignment="Center" />
                 </StackPanel>
             </kz:KzButton>
 
@@ -85,7 +94,7 @@
             <kz:KzButton Name="PART_BtnExport"
                          Variant="Ghost" KzSize="Sm"
                          IsVisible="False" Focusable="False">
-                <StackPanel Orientation="Horizontal" Spacing="4">
+                <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
                     <TextBlock Text="📤" Margin="0,0,0,2" FontFamily="{StaticResource kz.font.icon}" FontSize="15" VerticalAlignment="Center" />
                     <TextBlock Name="PART_LblExport" Text="Export" VerticalAlignment="Center" />
                 </StackPanel>

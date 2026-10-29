@@ -233,6 +233,17 @@ namespace KztekComponent.Controls
             // 4. Apply placement rules.
             if (len == 1) return clusterStart;
 
+            // Special case: "uyê" cluster (not preceded by 'q', which is already skipped
+            // above as an onset glide) — the nucleus is ê, e.g. "nguyễn", "chuyện", "khuyến".
+            // The generic 3-vowel "middle" rule would wrongly place the tone on 'y'.
+            if (len == 3)
+            {
+                GetVowelInfo(char.ToLowerInvariant(word[clusterStart]),     out char b0, out _);
+                GetVowelInfo(char.ToLowerInvariant(word[clusterStart + 1]), out char b1, out _);
+                GetVowelInfo(char.ToLowerInvariant(word[clusterStart + 2]), out char b2, out _);
+                if (b0 == 'u' && b1 == 'y' && b2 == 'ê') return clusterEnd;
+            }
+
             // 3+ vowels → middle (index 1 within the cluster)
             if (len >= 3) return clusterStart + 1;
 
@@ -243,6 +254,11 @@ namespace KztekComponent.Controls
             // Rule A: coda semi-vowel (i / y / u at end) → tone on FIRST
             //   Examples: ai, ay, âu, ôi, ơi, ui, ưi, iu, êu, uy …
             if (lastBase == 'i' || lastBase == 'y' || lastBase == 'u')
+                return clusterStart;
+
+            // Rule A2: closing diphthong ao / eo (coda 'o' acts as the same semi-vowel
+            // role as i/y/u above) → tone on FIRST. Examples: báo, kéo, vào, leo, sáo.
+            if (lastBase == 'o' && (startBase == 'a' || startBase == 'e'))
                 return clusterStart;
 
             // Rule B: open diphthong  ia / ua / ưa → tone on FIRST (the nuclear vowel)

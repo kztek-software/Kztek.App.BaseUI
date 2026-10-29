@@ -36,6 +36,9 @@ public partial class KzCrudControl : UserControl
     public static readonly StyledProperty<bool> ShowExportProperty =
         AvaloniaProperty.Register<KzCrudControl, bool>(nameof(ShowExport), false);
 
+    public static readonly StyledProperty<bool> ShowBulkDeleteProperty =
+        AvaloniaProperty.Register<KzCrudControl, bool>(nameof(ShowBulkDelete), false);
+
     public IEnumerable? ItemsSource
     {
         get => GetValue(ItemsSourceProperty);
@@ -66,6 +69,12 @@ public partial class KzCrudControl : UserControl
         set => SetValue(SelectedItemProperty, value);
     }
 
+    /// <summary>
+    /// Toàn bộ dòng đang được chọn (DataGrid.SelectionMode="Extended" — Ctrl/Shift+click chọn nhiều).
+    /// Đọc trực tiếp từ DataGrid, luôn phản ánh đúng lựa chọn hiện tại; không cần bind riêng.
+    /// </summary>
+    public IList? SelectedItems => _grid?.SelectedItems;
+
     public bool ShowImport
     {
         get => GetValue(ShowImportProperty);
@@ -76,6 +85,17 @@ public partial class KzCrudControl : UserControl
     {
         get => GetValue(ShowExportProperty);
         set => SetValue(ShowExportProperty, value);
+    }
+
+    /// <summary>
+    /// Hiện nút "Xóa nhiều" trong toolbar. Mặc định false để backward-compatible với
+    /// các nơi đang dùng KzCrudControl mà chưa cần bulk delete.
+    /// Set = true tại caller (VD SettingWindow) để bật.
+    /// </summary>
+    public bool ShowBulkDelete
+    {
+        get => GetValue(ShowBulkDeleteProperty);
+        set => SetValue(ShowBulkDeleteProperty, value);
     }
 
     // ── Inner control exposure ────────────────────────────────────────────────
@@ -112,6 +132,12 @@ public partial class KzCrudControl : UserControl
     public event EventHandler? RefreshClicked;
     public event EventHandler? ImportClicked;
     public event EventHandler? ExportClicked;
+    /// <summary>
+    /// Kích hoạt khi user bấm nút "Xóa nhiều" (chỉ khi SelectedItems.Count >= 2).
+    /// Caller phải: snapshot SelectedItems, hiện confirm dialog, loop xóa từng item,
+    /// xử lý kết quả (xem ADR-D và ADR-E trong PLAN-feature-bulk-delete-crud).
+    /// </summary>
+    public event EventHandler? BulkDeleteClicked;
     public event EventHandler<PageChangedEventArgs>? PageChanged;
     public event EventHandler<SelectionChangedEventArgs>? SelectionChanged;
 
@@ -133,8 +159,10 @@ public partial class KzCrudControl : UserControl
     private EventHandler? _onToolBarRefresh;
     private EventHandler? _onToolBarImport;
     private EventHandler? _onToolBarExport;
+    private EventHandler? _onToolBarBulkDelete;
     private EventHandler<PageChangedEventArgs>? _onNavPageChanged;
     private EventHandler<SelectionChangedEventArgs>? _onGridSelectionChanged;
+    private EventHandler<Avalonia.Input.TappedEventArgs>? _onGridDoubleTapped;
 
     public KzCrudControl() => InitializeComponent();
 
@@ -147,19 +175,21 @@ public partial class KzCrudControl : UserControl
         _nav = this.FindControl<KzNavigation>("PART_Nav")!;
         _txtCount = this.FindControl<TextBlock>("PART_TxtCount")!;
 
-        _onToolBarAdd = (s, e2) => AddClicked?.Invoke(s, e2);
-        _onToolBarEdit = (s, e2) => EditClicked?.Invoke(s, e2);
-        _onToolBarDelete = (s, e2) => DeleteClicked?.Invoke(s, e2);
-        _onToolBarRefresh = (s, e2) => RefreshClicked?.Invoke(s, e2);
-        _onToolBarImport = (s, e2) => ImportClicked?.Invoke(s, e2);
-        _onToolBarExport = (s, e2) => ExportClicked?.Invoke(s, e2);
+        _onToolBarAdd        = (s, e2) => AddClicked?.Invoke(s, e2);
+        _onToolBarEdit       = (s, e2) => EditClicked?.Invoke(s, e2);
+        _onToolBarDelete     = (s, e2) => DeleteClicked?.Invoke(s, e2);
+        _onToolBarRefresh    = (s, e2) => RefreshClicked?.Invoke(s, e2);
+        _onToolBarImport     = (s, e2) => ImportClicked?.Invoke(s, e2);
+        _onToolBarExport     = (s, e2) => ExportClicked?.Invoke(s, e2);
+        _onToolBarBulkDelete = (s, e2) => BulkDeleteClicked?.Invoke(s, e2);
 
-        _toolBar.AddClicked += _onToolBarAdd;
-        _toolBar.EditClicked += _onToolBarEdit;
-        _toolBar.DeleteClicked += _onToolBarDelete;
-        _toolBar.RefreshClicked += _onToolBarRefresh;
-        _toolBar.ImportClicked += _onToolBarImport;
-        _toolBar.ExportClicked += _onToolBarExport;
+        _toolBar.AddClicked        += _onToolBarAdd;
+        _toolBar.EditClicked       += _onToolBarEdit;
+        _toolBar.DeleteClicked     += _onToolBarDelete;
+        _toolBar.RefreshClicked    += _onToolBarRefresh;
+        _toolBar.ImportClicked     += _onToolBarImport;
+        _toolBar.ExportClicked     += _onToolBarExport;
+        _toolBar.BulkDeleteClicked += _onToolBarBulkDelete;
 
         _onNavPageChanged = (_, args) =>
         {
@@ -174,9 +204,18 @@ public partial class KzCrudControl : UserControl
             _isUpdatingSelection = true;
             try { SelectedItem = _grid.SelectedItem; }
             finally { _isUpdatingSelection = false; }
+            // Cập nhật enable/disable nút Bulk Delete theo số dòng đang chọn (>=2 mới cho xóa nhiều)
+            if (_toolBar is not null)
+                _toolBar.IsBulkDeleteEnabled = (_grid.SelectedItems?.Count ?? 0) >= 2;
             SelectionChanged?.Invoke(s, args);
         };
         _grid.SelectionChanged += _onGridSelectionChanged;
+
+        _onGridDoubleTapped = (s, e2) =>
+        {
+            if (SelectedItem is not null) EditClicked?.Invoke(s, e2);
+        };
+        _grid.DoubleTapped += _onGridDoubleTapped;
 
         SyncAll();
     }
@@ -191,15 +230,20 @@ public partial class KzCrudControl : UserControl
         }
         if (_toolBar is not null)
         {
-            _toolBar.AddClicked -= _onToolBarAdd;
-            _toolBar.EditClicked -= _onToolBarEdit;
-            _toolBar.DeleteClicked -= _onToolBarDelete;
-            _toolBar.RefreshClicked -= _onToolBarRefresh;
-            _toolBar.ImportClicked -= _onToolBarImport;
-            _toolBar.ExportClicked -= _onToolBarExport;
+            _toolBar.AddClicked        -= _onToolBarAdd;
+            _toolBar.EditClicked       -= _onToolBarEdit;
+            _toolBar.DeleteClicked     -= _onToolBarDelete;
+            _toolBar.RefreshClicked    -= _onToolBarRefresh;
+            _toolBar.ImportClicked     -= _onToolBarImport;
+            _toolBar.ExportClicked     -= _onToolBarExport;
+            _toolBar.BulkDeleteClicked -= _onToolBarBulkDelete;
         }
         if (_nav is not null) _nav.PageChanged -= _onNavPageChanged;
-        if (_grid is not null) _grid.SelectionChanged -= _onGridSelectionChanged;
+        if (_grid is not null)
+        {
+            _grid.SelectionChanged -= _onGridSelectionChanged;
+            _grid.DoubleTapped -= _onGridDoubleTapped;
+        }
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -240,6 +284,9 @@ public partial class KzCrudControl : UserControl
             _toolBar.ShowImport = ShowImport;
             _toolBar.ShowExport = ShowExport;
         }
+
+        else if (change.Property == ShowBulkDeleteProperty && _toolBar is not null)
+            _toolBar.ShowBulkDelete = ShowBulkDelete;
     }
 
     private void SyncAll()
@@ -258,8 +305,9 @@ public partial class KzCrudControl : UserControl
         UpdateCount();
         if (_toolBar is not null)
         {
-            _toolBar.ShowImport = ShowImport;
-            _toolBar.ShowExport = ShowExport;
+            _toolBar.ShowImport     = ShowImport;
+            _toolBar.ShowExport     = ShowExport;
+            _toolBar.ShowBulkDelete = ShowBulkDelete;
         }
     }
 

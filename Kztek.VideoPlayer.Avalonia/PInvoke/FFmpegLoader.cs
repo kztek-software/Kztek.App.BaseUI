@@ -124,6 +124,8 @@ namespace Kztek.VideoPlayer.Avalonia.PInvoke
             yield return baseDir;
             // Vị trí thật của file FFmpeg native đã đóng gói (csproj <None Update> CopyToOutputDirectory).
             yield return Path.Combine(baseDir, "runtimes", "win-x64", "native");
+            // Bản FFmpeg dùng chung với Kztek.Cameras.Avalonia (app chỉ giữ 1 bản ở đây, không nhân đôi ra gốc/runtimes).
+            yield return Path.Combine(baseDir, "Players", "FFMPEG", "Resource");
             yield return Path.Combine(baseDir, "Native");
             yield return Path.Combine(baseDir, "lib");
         }

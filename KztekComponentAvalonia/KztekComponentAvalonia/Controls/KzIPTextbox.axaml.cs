@@ -2,6 +2,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Threading;
 using KztekComponentAvalonia.Theme;
 using System;
 
@@ -73,6 +75,7 @@ public partial class KzIPTextbox : UserControl
     private Border? _border;
     private readonly EventHandler<TextChangedEventArgs>?[] _octetTextChangedHandlers = new EventHandler<TextChangedEventArgs>?[4];
     private readonly EventHandler<KeyEventArgs>?[]         _octetKeyDownHandlers      = new EventHandler<KeyEventArgs>?[4];
+    private readonly EventHandler<PointerPressedEventArgs>?[] _octetPointerPressedHandlers = new EventHandler<PointerPressedEventArgs>?[4];
     private EventHandler<PointerEventArgs>? _onBorderPointerEntered;
     private EventHandler<PointerEventArgs>? _onBorderPointerExited;
 
@@ -97,8 +100,25 @@ public partial class KzIPTextbox : UserControl
             int idx = i;
             _octetTextChangedHandlers[i] = (_, _) => OnOctetChanged(idx);
             _octetKeyDownHandlers[i]     = (_, ev) => OnOctetKeyDown(idx, ev);
+            // Bôi đen toàn bộ nội dung khi CLICK CHUỘT vào ô lần đầu (đang chưa focus) — user gõ đè
+            // ngay, không cần xóa tay trước. Chỉ áp dụng khi ô CHƯA focus (tránh đè caret khi user
+            // click lại để định vị con trỏ trong ô đang gõ dở). Không dùng GotFocus vì nó cũng fire
+            // khi điều hướng bằng phím (Backspace/Left/Right/".") — nơi code đã tự set caret chính
+            // xác, SelectAll ở đây sẽ phá hỏng hành vi xóa liên tục qua nhiều ô.
+            //
+            // BẮT BUỘC đăng ký ở pha Tunnel (không phải Bubble mặc định của "+="): TextBox tự xử lý
+            // PointerPressed để set focus + đặt caret theo tọa độ click NGAY khi event tới nó, TRƯỚC
+            // khi handler Bubble bên ngoài kịp chạy — nên kiểm tra IsFocused ở pha Bubble luôn thấy
+            // "đã focus" (do chính click này vừa set), khiến điều kiện never true. Tunnel chạy sớm
+            // hơn, bắt được đúng trạng thái focus TRƯỚC khi TextBox xử lý click.
+            _octetPointerPressedHandlers[i] = (_, _) =>
+            {
+                if (!_octets[idx].IsFocused)
+                    Dispatcher.UIThread.Post(() => _octets[idx].SelectAll());
+            };
             _octets[i].TextChanged += _octetTextChangedHandlers[i];
             _octets[i].KeyDown     += _octetKeyDownHandlers[i];
+            _octets[i].AddHandler(InputElement.PointerPressedEvent, _octetPointerPressedHandlers[i], RoutingStrategies.Tunnel);
         }
 
         if (this.FindControl<Border>("PART_Border") is { } border)
@@ -127,8 +147,9 @@ public partial class KzIPTextbox : UserControl
         if (_octets is not null)
             for (int i = 0; i < 4; i++)
             {
-                if (_octetTextChangedHandlers[i] is not null) _octets[i].TextChanged -= _octetTextChangedHandlers[i];
-                if (_octetKeyDownHandlers[i]     is not null) _octets[i].KeyDown     -= _octetKeyDownHandlers[i];
+                if (_octetTextChangedHandlers[i]    is not null) _octets[i].TextChanged    -= _octetTextChangedHandlers[i];
+                if (_octetKeyDownHandlers[i]        is not null) _octets[i].KeyDown        -= _octetKeyDownHandlers[i];
+                if (_octetPointerPressedHandlers[i] is not null) _octets[i].RemoveHandler(InputElement.PointerPressedEvent, _octetPointerPressedHandlers[i]);
             }
         if (_border is not null)
         {

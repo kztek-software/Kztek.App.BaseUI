@@ -20,6 +20,7 @@ public class KzDeviceNode : INotifyPropertyChanged
     private bool           _showGroupCounters = false;  // Backward compat: mặc định TẮT
     private int            _groupOnlineCount  = 0;
     private int            _groupOfflineCount = 0;
+    private bool           _showStatus        = true;
 
     public string Name
     {
@@ -30,7 +31,7 @@ public class KzDeviceNode : INotifyPropertyChanged
     public KzDeviceType DeviceType
     {
         get => _deviceType;
-        set { _deviceType = value; OnPropertyChanged(); OnPropertyChanged(nameof(DeviceIcon)); OnPropertyChanged(nameof(NameBrush)); OnPropertyChanged(nameof(StatusLabel)); OnPropertyChanged(nameof(StatusBrush)); OnPropertyChanged(nameof(StatusBadgeBrush)); OnPropertyChanged(nameof(IsLeaf)); OnPropertyChanged(nameof(IsGroup)); OnPropertyChanged(nameof(ShowGroupBadges)); }
+        set { _deviceType = value; OnPropertyChanged(); OnPropertyChanged(nameof(DeviceIcon)); OnPropertyChanged(nameof(NameBrush)); OnPropertyChanged(nameof(StatusLabel)); OnPropertyChanged(nameof(StatusBrush)); OnPropertyChanged(nameof(StatusBadgeBrush)); OnPropertyChanged(nameof(IsLeaf)); OnPropertyChanged(nameof(IsGroup)); OnPropertyChanged(nameof(ShowGroupBadges)); OnPropertyChanged(nameof(ShowStatus)); }
     }
 
     public KzDeviceStatus Status
@@ -117,6 +118,7 @@ public class KzDeviceNode : INotifyPropertyChanged
         },
         KzDeviceType.EntryGate  => "🚗",
         KzDeviceType.ExitGate   => "🚪",
+        KzDeviceType.Door       => "🚪",
         KzDeviceType.Server     => "🖧",
         KzDeviceType.Network    => "🌐",
         _                       => "⚙",
@@ -219,6 +221,14 @@ public class KzDeviceNode : INotifyPropertyChanged
 
     public bool IsGroup => DeviceType is KzDeviceType.Group or KzDeviceType.GateGroup;
     public bool IsLeaf  => !IsGroup;
+
+    /// <summary>Cờ cho phép hiển thị trạng thái kết nối (dot icon và badge Online/Offline).
+    /// Mặc định true cho các leaf node, riêng Door tự động tắt.</summary>
+    public bool ShowStatus
+    {
+        get => _showStatus && IsLeaf && DeviceType != KzDeviceType.Door;
+        set { if (_showStatus == value) return; _showStatus = value; OnPropertyChanged(); }
+    }
 
     /// <summary>Cờ bật badge đếm online/offline cho node group. Mặc định false để
     /// project khác đang dùng KzDeviceTree không thấy chip mới. App set true khi wire.</summary>

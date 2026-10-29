@@ -55,5 +55,18 @@ public enum KzDeviceType
 
     /// <summary>Node nhóm theo Gate (cổng bãi xe) — hành xử như <see cref="Group"/> (IsGroup/IsLeaf,
     /// đếm online) nhưng icon riêng để phân biệt trực quan với group thường (VD: root "Danh sách thiết bị").</summary>
-    GateGroup
+    GateGroup,
+
+    /// <summary>Node thiết bị cửa (Door) — hiển thị icon cửa 🚪, không hiển thị trạng thái online/offline.</summary>
+    Door
+}
+
+/// <summary>Biến thể màu của <c>KzRoundCountdown</c> (vòng đếm ngược tròn).</summary>
+public enum KzCountDownVariant
+{
+    Default,    // Navy ring + Navy number
+    Accent,     // Orange ring + Orange number
+    Success,    // Green ring
+    Danger,     // Red ring
+    Light       // Gray track + Navy-300 progress
 }

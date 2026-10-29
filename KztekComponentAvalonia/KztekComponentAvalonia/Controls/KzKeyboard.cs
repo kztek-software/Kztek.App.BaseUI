@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -97,11 +98,28 @@ public class KzKeyboard : Control
         }
     }
 
+    /// <summary>Current key layout. Lets the host preselect Numeric for number-only fields.</summary>
+    public KzKeyboardMode Mode
+    {
+        get => _mode;
+        set
+        {
+            if (_mode == value) return;
+            _mode = value;
+            TelexResetSyllable();
+            InvalidateVisual();
+        }
+    }
+
     // ── State ─────────────────────────────────────────────────────────────────
     private KzKeyboardMode _mode           = KzKeyboardMode.Alpha;
     private bool           _shifted        = false;
     private bool           _capsLock       = false;
     private string?        _pressedVal;
+    private long           _pressTimestamp;
+    private bool           _isPointerDown;
+    private DispatcherTimer? _clearTimer;
+    private static readonly Typeface KeyTypeface = new(new FontFamily("Segoe UI, Inter, Roboto, Noto Sans, sans-serif"));
 
     private readonly List<(Rect R, KD Key)> _layout = new();
 
@@ -224,7 +242,7 @@ public class KzKeyboard : Control
             lbl,
             System.Globalization.CultureInfo.CurrentCulture,
             FlowDirection.LeftToRight,
-            new Typeface("Segoe UI"),
+            KeyTypeface,
             fs,
             fg);
 
@@ -255,16 +273,103 @@ public class KzKeyboard : Control
             InvalidateVisual();
             ProcessKey(val);
 
-            var resetTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(110) };
-            resetTimer.Tick += (_, _) =>
-            {
-                resetTimer.Stop();
-                _pressedVal = null;
-                InvalidateVisual();
-            };
-            resetTimer.Start();
+            _pressTimestamp = Stopwatch.GetTimestamp();
+            _isPointerDown = true;
+            if (val == "BACK") StartBackspaceRepeat(); else StopBackspaceRepeat();
+            _clearTimer?.Stop();
+            _clearTimer = null;
+            e.Pointer.Capture(this);
+            e.Handled = true;
+
             break;
         }
+    }
+
+    protected override void OnPointerReleased(PointerReleasedEventArgs e)
+    {
+        base.OnPointerReleased(e);
+        StopBackspaceRepeat();
+        if (_isPointerDown)
+        {
+            _isPointerDown = false;
+            if (e.Pointer.Captured == this)
+            {
+                e.Pointer.Capture(null);
+            }
+            e.Handled = true;
+
+            long elapsedMs = (Stopwatch.GetTimestamp() - _pressTimestamp) * 1000 / Stopwatch.Frequency;
+            const long minFlashDurationMs = 70;
+            if (elapsedMs < minFlashDurationMs)
+            {
+                long delay = minFlashDurationMs - elapsedMs;
+                _clearTimer?.Stop();
+                _clearTimer = new DispatcherTimer(DispatcherPriority.Render)
+                {
+                    Interval = TimeSpan.FromMilliseconds(delay)
+                };
+                _clearTimer.Tick += (_, _) =>
+                {
+                    _clearTimer.Stop();
+                    _clearTimer = null;
+                    if (!_isPointerDown)
+                    {
+                        _pressedVal = null;
+                        InvalidateVisual();
+                    }
+                };
+                _clearTimer.Start();
+            }
+            else
+            {
+                _pressedVal = null;
+                InvalidateVisual();
+            }
+        }
+    }
+
+    protected override void OnPointerCaptureLost(PointerCaptureLostEventArgs e)
+    {
+        base.OnPointerCaptureLost(e);
+        StopBackspaceRepeat();
+        _isPointerDown = false;
+        _clearTimer?.Stop();
+        _clearTimer = null;
+        if (_pressedVal != null)
+        {
+            _pressedVal = null;
+            InvalidateVisual();
+        }
+    }
+
+    // ── Giu nut xoa (⌫) de xoa lien tuc: tre 400ms, sau do 70ms/ky tu, tang toc xuong 35ms sau 12 ky tu ──
+    private DispatcherTimer? _repeatTimer;
+    private int _repeatCount;
+
+    private void StartBackspaceRepeat()
+    {
+        StopBackspaceRepeat();
+        _repeatCount = 0;
+        _repeatTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(400) };
+        _repeatTimer.Tick += (_, _) =>
+        {
+            if (!_isPointerDown || _repeatTimer is null)
+            {
+                StopBackspaceRepeat();
+                return;
+            }
+
+            _repeatCount++;
+            _repeatTimer.Interval = TimeSpan.FromMilliseconds(_repeatCount > 12 ? 35 : 70);
+            ProcessKey("BACK");
+        };
+        _repeatTimer.Start();
+    }
+
+    private void StopBackspaceRepeat()
+    {
+        _repeatTimer?.Stop();
+        _repeatTimer = null;
     }
 
     private void ProcessKey(string val)
@@ -335,6 +440,7 @@ public class KzKeyboard : Control
     private void TypeTelex(string val)
     {
         if (TargetTextBox == null) return;
+        DeleteSelection();
         string before = GetTextBeforeCursor();
         var (del, ins) = KzTelexEngine.Process(before, val[0]);
         for (int i = 0; i < del; i++) DoBackspaceRaw();
@@ -350,10 +456,27 @@ public class KzKeyboard : Control
 
     // ── Text target helpers ───────────────────────────────────────────────────
 
+    /// <summary>Xoa doan van ban dang duoc boi chon (neu co). Tra ve true neu da xoa.</summary>
+    private bool DeleteSelection()
+    {
+        var tb = TargetTextBox;
+        if (tb is null) return false;
+        string txt = tb.Text ?? "";
+        int a = Math.Clamp(Math.Min(tb.SelectionStart, tb.SelectionEnd), 0, txt.Length);
+        int b = Math.Clamp(Math.Max(tb.SelectionStart, tb.SelectionEnd), 0, txt.Length);
+        if (a == b) return false;
+        tb.Text = txt.Remove(a, b - a);
+        tb.CaretIndex = a;
+        tb.SelectionStart = a;
+        tb.SelectionEnd = a;
+        return true;
+    }
+
     private void TypeTextRaw(string text)
     {
         var tb = TargetTextBox;
         if (tb is null) return;
+        DeleteSelection(); // go ky tu khi dang boi chon -> thay the doan chon
         int pos = tb.CaretIndex;
         tb.Text = (tb.Text ?? "").Insert(pos, text);
         tb.CaretIndex = pos + text.Length;
@@ -382,6 +505,7 @@ public class KzKeyboard : Control
     {
         var tb = TargetTextBox;
         if (tb is null) return;
+        if (DeleteSelection()) return; // dang boi chon: xoa ca doan chon
         int pos = tb.CaretIndex;
         if (pos <= 0 || string.IsNullOrEmpty(tb.Text)) return;
         tb.Text       = tb.Text.Remove(pos - 1, 1);

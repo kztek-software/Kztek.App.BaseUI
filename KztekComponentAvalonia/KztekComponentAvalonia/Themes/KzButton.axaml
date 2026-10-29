@@ -98,6 +98,7 @@
         </Style>
         <Style Selector="^.kz-btn-primary:pressed /template/ Border#PART_Border">
             <Setter Property="Background" Value="{StaticResource kz.brush.navy.900}" />
+            <Setter Property="BorderBrush" Value="{StaticResource kz.brush.navy.900}" />
             <Setter Property="BoxShadow" Value="0 0 0 0 #00000000" />
         </Style>
 
@@ -114,6 +115,7 @@
         </Style>
         <Style Selector="^.kz-btn-accent:pressed /template/ Border#PART_Border">
             <Setter Property="Background" Value="{StaticResource kz.brush.orange.hover}" />
+            <Setter Property="BorderBrush" Value="{StaticResource kz.brush.orange.hover}" />
             <Setter Property="BoxShadow" Value="0 0 0 0 #00000000" />
         </Style>
 
@@ -125,10 +127,11 @@
         </Style>
         <Style Selector="^.kz-btn-secondary:pointerover /template/ Border#PART_Border">
             <Setter Property="Background" Value="{StaticResource kz.brush.navy.100}" />
-            <Setter Property="BorderBrush" Value="{StaticResource kz.brush.navy.700}" />
+            <Setter Property="BorderBrush" Value="{StaticResource kz.brush.navy.100}" />
         </Style>
         <Style Selector="^.kz-btn-secondary:pressed /template/ Border#PART_Border">
             <Setter Property="Background" Value="{StaticResource kz.brush.navy.300}" />
+            <Setter Property="BorderBrush" Value="{StaticResource kz.brush.navy.300}" />
         </Style>
 
         <!-- ── Ghost ── -->
@@ -139,9 +142,11 @@
         </Style>
         <Style Selector="^.kz-btn-ghost:pointerover /template/ Border#PART_Border">
             <Setter Property="Background" Value="{StaticResource kz.brush.navy.100}" />
+            <Setter Property="BorderBrush" Value="{StaticResource kz.brush.navy.100}" />
         </Style>
         <Style Selector="^.kz-btn-ghost:pressed /template/ Border#PART_Border">
             <Setter Property="Background" Value="{StaticResource kz.brush.navy.300}" />
+            <Setter Property="BorderBrush" Value="{StaticResource kz.brush.navy.300}" />
         </Style>
 
         <!-- ── Danger (dùng Navy nhạt — KZTEK cấm màu đỏ tươi, xem kztek-brand-info) ── -->
@@ -157,6 +162,7 @@
         </Style>
         <Style Selector="^.kz-btn-danger:pressed /template/ Border#PART_Border">
             <Setter Property="Background" Value="{StaticResource kz.brush.navy.hover}" />
+            <Setter Property="BorderBrush" Value="{StaticResource kz.brush.navy.hover}" />
             <Setter Property="BoxShadow" Value="0 0 0 0 #00000000" />
         </Style>
 

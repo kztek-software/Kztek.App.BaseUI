@@ -1,8 +1,11 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using KztekComponentAvalonia.Theme;
 
@@ -48,6 +51,7 @@ public class KzSearchBox : UserControl
         set => SetValue(DebounceIntervalProperty, value);
     }
 
+    private readonly Border _rootBorder;
     private readonly TextBox _textBox;
     private readonly Button _clearButton;
     private DispatcherTimer? _debounce;
@@ -61,9 +65,46 @@ public class KzSearchBox : UserControl
             Background = Brushes.Transparent,
             VerticalContentAlignment = VerticalAlignment.Center,
             Padding = new Thickness(0),
-            MinHeight = 0
+            MinHeight = 0,
+            // FocusAdorner=null KHÔNG đủ: FluentTheme's ControlTheme của TextBox có Style
+            // "^:focus /template/ Border#PART_BorderElement" ghi Background/BorderBrush/
+            // BorderThickness TRỰC TIẾP lên Border con trong template — Style targeting thẳng
+            // phần tử con này LUÔN thắng TemplateBinding (nơi giá trị local BorderThickness=0 ở
+            // trên chảy xuống), nên border xanh mặc định của Fluent vẫn hiện khi focus dù đã set
+            // local = 0. Phải override đúng 3 Style bên dưới (Setters trang bằng Transparent/0)
+            // để triệt tiêu hẳn, KHÔNG chỉ dựa vào local value. Viền focus thật (bao trọn icon +
+            // text + nút xóa) được vẽ ở _rootBorder qua GotFocus/LostFocus bên dưới.
+            FocusAdorner = null
         };
+        _textBox.Styles.Add(new Style(x => x.OfType<TextBox>().Template().OfType<Border>().Name("PART_BorderElement"))
+        {
+            Setters =
+            {
+                new Setter(Border.BackgroundProperty, Brushes.Transparent),
+                new Setter(Border.BorderBrushProperty, Brushes.Transparent),
+                new Setter(Border.BorderThicknessProperty, new Thickness(0))
+            }
+        });
+        _textBox.Styles.Add(new Style(x => x.OfType<TextBox>().Class(":focus").Template().OfType<Border>().Name("PART_BorderElement"))
+        {
+            Setters =
+            {
+                new Setter(Border.BackgroundProperty, Brushes.Transparent),
+                new Setter(Border.BorderBrushProperty, Brushes.Transparent),
+                new Setter(Border.BorderThicknessProperty, new Thickness(0))
+            }
+        });
+        _textBox.Styles.Add(new Style(x => x.OfType<TextBox>().Class(":pointerover").Template().OfType<Border>().Name("PART_BorderElement"))
+        {
+            Setters =
+            {
+                new Setter(Border.BackgroundProperty, Brushes.Transparent),
+                new Setter(Border.BorderBrushProperty, Brushes.Transparent)
+            }
+        });
         _textBox.TextChanged += OnInnerTextChanged;
+        _textBox.GotFocus += OnInnerTextBoxGotFocus;
+        _textBox.LostFocus += OnInnerTextBoxLostFocus;
 
         _clearButton = new Button
         {
@@ -96,7 +137,7 @@ public class KzSearchBox : UserControl
         dock.Children.Add(_clearButton);
         dock.Children.Add(_textBox);
 
-        Content = new Border
+        _rootBorder = new Border
         {
             Background = KzTokens.BgDefaultBrush,
             BorderBrush = KzTokens.BorderBrush,
@@ -106,6 +147,19 @@ public class KzSearchBox : UserControl
             Height = 32,
             Child = dock
         };
+        Content = _rootBorder;
+    }
+
+    private void OnInnerTextBoxGotFocus(object? sender, RoutedEventArgs e)
+    {
+        _rootBorder.BorderBrush = KzTokens.Orange500Brush;
+        _rootBorder.BorderThickness = new Thickness(2);
+    }
+
+    private void OnInnerTextBoxLostFocus(object? sender, RoutedEventArgs e)
+    {
+        _rootBorder.BorderBrush = KzTokens.BorderBrush;
+        _rootBorder.BorderThickness = new Thickness(1);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
